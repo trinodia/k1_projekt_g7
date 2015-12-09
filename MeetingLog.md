@@ -32,9 +32,8 @@ Sprint planning/retrospective scheduled to Sundays 20.00
   *	Unit testing by developer and code reviewer
 
 #####v.1 – Final testing and documentation.
-  *	Sprint planning 20/12 20.00
-  *	Retrospective 27/12 20.00
+  *	Retrospective/Test and deployment planning 27/12 20.00
   *	Acceptance testing and final bug fixes
-  *	Deliverance 6/1 23:59
+  *	Delivery at 6/1 23:59
 
 
