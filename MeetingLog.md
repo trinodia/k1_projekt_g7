@@ -8,19 +8,19 @@ v.50 – Initial planning
 v.51 – Sprint 1 
   •	SCRUM master Gustav Nyberg
   •	Sprint planning 13/12 20.00
-  •	Item 1-3.
+  •	Item 1-3
   •	Unit testing by developer and code reviewer
 
 v.52 – Sprint 2
   •	SCRUM master Daniel Eldström
   •	Sprint planning/retrospective 20/12 20.00
-  •	Item 4-8.
+  •	Item 4-8
   •	Unit testing by developer and code reviewer
 
 v.53 – Sprint 3
   •	SCRUM master James Enggren
   •	Sprint planning/retrospective 20/12 20.00
-  •	Item 9-11.
+  •	Item 9-11
   •	Unit testing by developer and code reviewer
 
 v.1 – Final testing and documentation.
