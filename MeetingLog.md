@@ -3,30 +3,29 @@ Daily stand-up week days 20.00
 Sprint planning/retrospective Sundays 20.00
 
 v.50 – Initial planning
-•	Preparation – DB setup, create and play with local WCF project, load up planning document/meeting log.
+  •	Preparation – DB setup, create and play with local WCF project, load up planning document/meeting log.
 
 v.51 – Sprint 1 
-•	SCRUM master Gustav Nyberg
-•	Sprint planning 13/12 20.00
-•	Item 1-3.
-•	Unit testing by developer and code reviewer
+  •	SCRUM master Gustav Nyberg
+  •	Sprint planning 13/12 20.00
+  •	Item 1-3.
+  •	Unit testing by developer and code reviewer
 
 v.52 – Sprint 2
-•	SCRUM master Daniel Eldström
-•	Sprint planning/retrospective 20/12 20.00
-•	Item 4-8.
-•	Unit testing by developer and code reviewer
+  •	SCRUM master Daniel Eldström
+  •	Sprint planning/retrospective 20/12 20.00
+  •	Item 4-8.
+  •	Unit testing by developer and code reviewer
 
 v.53 – Sprint 3
-•	SCRUM master James Enggren
-•	Sprint planning/retrospective 20/12 20.00
-•	Item 9-11.
-•	Unit testing by developer and code reviewer
+  •	SCRUM master James Enggren
+  •	Sprint planning/retrospective 20/12 20.00
+  •	Item 9-11.
+  •	Unit testing by developer and code reviewer
 
 v.1 – Final testing and documentation.
-•	Sprint planning 20/12 20.00
-•	Retrospective 27/12 20.00
-•	Acceptance testing and final bug fixes
+  •	Sprint planning 20/12 20.00
+  •	Retrospective 27/12 20.00
+  •	Acceptance testing and final bug fixes
 
 Delivery 6/1 23:59
-
