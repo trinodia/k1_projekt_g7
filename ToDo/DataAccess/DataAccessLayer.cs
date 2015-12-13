@@ -7,11 +7,21 @@ namespace DataAccess
 {
     public class DataAccessLayer
     {
+        const string ConnectionString =
+                @"Data Source = DESKTOP\SQLEXPRESS; Integrated Security = False; User ID = RestFullUser; 
+                Password = RestFull123; Connect Timeout = 15; Encrypt = False; TrustServerCertificate = False; 
+                ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
+
         private string ErrorMessage { get; set; }
         private SqlConnection conn;
         private static string connString;
         private SqlCommand command;       
         private static List<ToDo> toDoList;
+
+        public DataAccessLayer()
+        {
+            connString = ConnectionString;
+        }
 
         public DataAccessLayer(string _connString)
         {
