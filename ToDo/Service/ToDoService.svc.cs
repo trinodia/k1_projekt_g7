@@ -15,7 +15,6 @@ namespace Service
 
         public string AddToDoList(string name)
         {
-
             try
             {
                 BusinessLogicLayer.AddToDoList(name);
@@ -24,7 +23,7 @@ namespace Service
             {
                 return argEx.Message;
             }
-            catch
+            catch (Exception)
             {
                 return "Något gick fel, försök igen.";
             }

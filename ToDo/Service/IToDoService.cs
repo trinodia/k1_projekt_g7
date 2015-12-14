@@ -2,7 +2,6 @@
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using DataModel;
-using System;
 
 namespace Service
 {

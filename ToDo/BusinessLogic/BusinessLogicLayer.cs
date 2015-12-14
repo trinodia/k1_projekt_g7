@@ -16,41 +16,25 @@ namespace BusinessLogic
 
         public static void AddToDoList(string name)
         {
-            try
-            {
-                if (name.Length < 6)
-                {
-                    throw new ArgumentException("Namn på listan måste vara minst 6 tecken");
-                }
-                else
-                {
-                    var dbSession = new DataAccessLayer();
+            if (name.Length < 6)
+                throw new ArgumentException("The name of the list most be at least 6 chars.");
 
-                    var currentLists = dbSession.GetToDoListByName(name);
-                    if (currentLists.Count > 0)
-                    {
-                        throw new ArgumentException("Namnet på listan måste vara unikt");
-                    }
-                    else
-                    {
-                        var newToDo = new ToDo()
-                        {
-                            Name = name,
-                            Description = "",
-                            Finnished = false,
-                            CreatedDate = DateTime.Now,
-                            DeadLine = DateTime.Now,
-                            EstimationTime = -1
-                        };
+            var dbSession = new DataAccessLayer();
 
-                        dbSession.AddToDo(newToDo);
-                    }
-                }
-            }
-            catch (Exception ex)
+            if (dbSession.GetToDoListByName(name).Count > 0)
+                throw new ArgumentException("A list with this name already exists and the name of a list most be unique.");
+
+            var newToDo = new ToDo()
             {
-                throw ex;
-            }
+                Name = name,
+                Description = "",
+                Finnished = false,
+                CreatedDate = DateTime.Now,
+                DeadLine = DateTime.Now,
+                EstimationTime = -1
+            };
+
+            dbSession.AddToDo(newToDo);
         }
     }
 }
