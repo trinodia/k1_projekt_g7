@@ -14,48 +14,43 @@ namespace BusinessLogic
             return toDoList;
         }
 
-        public static string AddToDo(string name, string description, bool finnished, DateTime createdDate, DateTime deadLine, int estimationTime)
+        public static void AddToDoList(string name)
         {
-            string error = "";
             try
             {
                 if (name.Length < 6)
                 {
-                    error = "Namn på listan måste vara minst 6 tecken";
+                    throw new ArgumentException("Namn på listan måste vara minst 6 tecken");
                 }
                 else
                 {
-
-
                     var dbSession = new DataAccessLayer();
 
                     var currentLists = dbSession.GetToDoListByName(name);
                     if (currentLists.Count > 0)
                     {
-                        error = "Namnet på todolistan måste vara unikt.";
+                        throw new ArgumentException("Namnet på listan måste vara unikt");
                     }
                     else
                     {
                         var newToDo = new ToDo()
                         {
                             Name = name,
-                            Description = description,
-                            Finnished = finnished,
-                            CreatedDate = createdDate,
-                            DeadLine = deadLine,
-                            EstimationTime = estimationTime
+                            Description = "",
+                            Finnished = false,
+                            CreatedDate = DateTime.Now,
+                            DeadLine = DateTime.Now,
+                            EstimationTime = -1
                         };
 
                         dbSession.AddToDo(newToDo);
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                error = "Något gick fel, försök igen.";
+                throw ex;
             }
-            return error;
-
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Client
                     Console.WriteLine("");
 
                     Console.WriteLine("Calling AddToDo via HTTP POST: ");
-                    var error = channel.AddToDo("Daniels lista", "", false, DateTime.Now, DateTime.Now, 0);
+                    var error = channel.AddToDoList("Daniels lista 2");
                     
                     if(!string.IsNullOrEmpty(error))
                     {
@@ -45,9 +45,9 @@ namespace Client
                         Console.WriteLine("Error: " + error);
                     }
                     Console.WriteLine("");
-                    Console.WriteLine("This can also be accomplished by posting item to");
+                    Console.WriteLine("This can also be accomplished by posting a JSON Object to");
                     Console.WriteLine("http://localhost:8000/AddToDo");
-                    Console.WriteLine("in a web browser while this sample is running.");
+                    Console.WriteLine("while this sample is running.");
 
                     Console.WriteLine("");
 

@@ -13,9 +13,22 @@ namespace Service
             return toDoList;
         }
 
-        public string AddToDo(string name, string description, bool finnished, DateTime createdDate, DateTime deadLine, int estimationTime)
-        { 
-            return BusinessLogicLayer.AddToDo(name, description, finnished, createdDate, deadLine, estimationTime);
+        public string AddToDoList(string name)
+        {
+
+            try
+            {
+                BusinessLogicLayer.AddToDoList(name);
+            }
+            catch(ArgumentException argEx)
+            {
+                return argEx.Message;
+            }
+            catch
+            {
+                return "Något gick fel, försök igen.";
+            }
+            return "";
         }
     }
 }
