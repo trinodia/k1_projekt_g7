@@ -9,8 +9,22 @@ namespace Service
     {
         public List<ToDo> GetToDoListByName(string name)
         {
-            var toDoList = BusinessLogicLayer.GetToDoListByName(name);
-            return toDoList;
+            var toDoList = new List<ToDo>();
+            try
+            {
+                toDoList = BusinessLogicLayer.GetToDoListByName(name);
+                return toDoList;
+            }
+            catch (ArgumentException argEx)
+            {
+                //TODO: Write argEx.Message to browser;
+                return toDoList;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return toDoList;
+            }
         }
 
         public string AddToDoList(string name)
@@ -25,8 +39,10 @@ namespace Service
             }
             catch (Exception)
             {
-                return "Något gick fel, försök igen.";
+                //TODO: Write "Unknown exception." to browser.
+                return "Unknown exception.";
             }
+            //TODO: Write "" to browser.
             return "";
         }
     }

@@ -2,6 +2,7 @@
 using DataModel;
 using DataAccess;
 using System;
+using System.Linq;
 
 namespace BusinessLogic
 {
@@ -11,6 +12,10 @@ namespace BusinessLogic
         {
             var dbSession = new DataAccessLayer();
             var toDoList = dbSession.GetToDoListByName(name);
+            if (toDoList == null)
+                throw new NullReferenceException("A list with the given name could not be retrieved.");
+            if (!toDoList.Any())
+                throw new ArgumentException("A list with the given name could not be found.");
             return toDoList;
         }
 
