@@ -16,5 +16,9 @@ namespace Service
         [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         string AddToDoList(string name);
 
+        [OperationContract]
+        [WebInvoke(Method = "DELETE", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        string DeleteToDoItem(int id);
+
     }
 }
