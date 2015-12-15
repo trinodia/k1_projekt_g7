@@ -25,6 +25,7 @@ namespace Service
             }
             catch (Exception)
             {
+                // logg ex.Message & ex.StackTrace
                 return "Något gick fel, försök igen.";
             }
             return "";
