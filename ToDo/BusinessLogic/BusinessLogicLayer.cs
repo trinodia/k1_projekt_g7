@@ -11,12 +11,23 @@ namespace BusinessLogic
         public static List<ToDo> GetToDoListByName(string name)
         {
             var dbSession = new DataAccessLayer();
+
             var toDoList = dbSession.GetToDoListByName(name);
+
             if (toDoList == null)
                 throw new NullReferenceException("A list with the given name could not be retrieved.");
+
             if (!toDoList.Any())
                 throw new ArgumentException("A list with the given name could not be found.");
+
             return toDoList;
+        }
+
+        public static void DeleteToDoItem(int id)
+        {
+            //TODO:Add error handling
+            var dbSession = new DataAccessLayer();
+            dbSession.DeleteToDoList(id);
         }
 
         public static void AddToDoList(string name)

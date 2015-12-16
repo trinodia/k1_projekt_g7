@@ -45,5 +45,24 @@ namespace Service
             //TODO: Write "" to browser.
             return "";
         }
+
+        public string DeleteToDoItem(int id)
+        {
+            try
+            {
+                BusinessLogicLayer.DeleteToDoItem(id);
+            }
+            catch (ArgumentException argEx)
+            {
+                return argEx.Message;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return "Unknown exception.";
+            }
+            //TODO: Write "" to browser.
+            return "";
+        }
     }
 }

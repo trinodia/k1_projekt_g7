@@ -25,6 +25,8 @@ namespace Client
                     GetToDoList(channel);
 
                     AddToDo(channel);
+
+                    DeleteToDoItem(channel);
                 }
 
                 Console.WriteLine("Press <ENTER> to terminate");
@@ -38,6 +40,12 @@ namespace Client
                 Console.WriteLine("An exception occurred: {0}", cex.Message);
                 host.Abort();
             }
+        }
+
+        private static void DeleteToDoItem(IToDoService channel)
+        {
+            Console.WriteLine("Calling DeleteToDoItem via HTTP DELETE: ");
+            channel.DeleteToDoItem(5);
         }
 
         private static void AddToDo(IToDoService channel)
