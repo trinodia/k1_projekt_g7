@@ -23,8 +23,8 @@ namespace Service
             catch (Exception)
             {
                 //TODO: Write "Unknown exception." to browser.
-            return toDoList;
-        }
+                return toDoList;
+            }
         }
 
         public string AddToDoList(string name)
@@ -33,7 +33,11 @@ namespace Service
             {
                 BusinessLogicLayer.AddToDoList(name);
             }
-            catch(ArgumentException argEx)
+            catch (NullReferenceException nullEx)
+            {
+                return nullEx.Message;
+            }
+            catch (ArgumentException argEx)
             {
                 return argEx.Message;
             }
