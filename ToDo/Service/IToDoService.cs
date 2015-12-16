@@ -13,7 +13,7 @@ namespace Service
         List<ToDo> GetToDoListByName(string name);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         string AddToDoList(string name);
 
     }
