@@ -82,9 +82,28 @@ namespace BusinessLogic
 
             dbSession.AddToDo(newToDo);
         }
+
+        public static List<ToDo> GetToDoListByDone(string name)
+        {
+            var dbSession = new DataAccessLayer();
+
+            var toDoList = dbSession.GetToDoListByName(name);
+
+            if (toDoList == null)
+                throw new NullReferenceException("A list with the given name could not be retrieved.");
+
+            if (!toDoList.Any())
+                throw new ArgumentException("A list with the given name could not be found.");
+
+
+            toDoList.RemoveAll(x => x.Finnished = false);
+
+            return toDoList;
+        }
+
     }
 
 
-    }
+}
 
 

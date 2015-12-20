@@ -26,6 +26,10 @@ namespace Service
         [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         string AddToDoEntry(string name, string description, DateTime deadline, int estimationtime);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        List<ToDo> GetToDoListByDone(string name);
+
 
 
     }
