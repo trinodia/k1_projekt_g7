@@ -54,7 +54,7 @@ namespace Service
         {
             try
             {
-                BusinessLogicLayer.DeleteToDoItem(id);
+                BusinessLogicLayer.DeleteToDoItemById(id);
             }
             catch (ArgumentException argEx)
             {
