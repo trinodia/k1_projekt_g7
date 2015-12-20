@@ -55,5 +55,36 @@ namespace BusinessLogic
 
             dbSession.AddToDo(newToDo);
         }
+
+        public static void AddToDoEntry(string name,string description, DateTime deadline, int estimationtime)
+        {
+            if (name == null && description == null && deadline == null)
+                throw new NullReferenceException("The Entry must be complete.");
+
+            if (estimationtime <=  0)
+                throw new ArgumentException("The Estimated time must be positive ");
+
+            var dbSession = new DataAccessLayer();
+
+            if (dbSession.GetToDoListByName(name).Count < 1 )
+                throw new ArgumentException("A list must be created first.");
+            //if (dbSession.GetToDoListByName(name).First   // Ersätta den första tomma ??
+
+            var newToDo = new ToDo()
+            {
+                Name = name,
+                Description = description,
+                Finnished = false,
+                CreatedDate = DateTime.Now,
+                DeadLine = deadline,
+                EstimationTime = estimationtime
+            };
+
+            dbSession.AddToDo(newToDo);
+        }
     }
-}
+
+
+    }
+
+

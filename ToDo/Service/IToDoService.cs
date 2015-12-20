@@ -2,6 +2,8 @@
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using DataModel;
+using System;
+
 
 namespace Service
 {
@@ -19,6 +21,12 @@ namespace Service
         [OperationContract]
         [WebInvoke(Method = "DELETE", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         string DeleteToDoItem(int id);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        string AddToDoEntry(string name, string description, DateTime deadline, int estimationtime);
+
+
 
     }
 }

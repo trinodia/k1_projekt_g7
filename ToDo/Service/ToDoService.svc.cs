@@ -68,5 +68,29 @@ namespace Service
             //TODO: Write "" to browser.
             return "";
         }
+
+        public string AddToDoEntry(string name, string description, DateTime deadline, int estimationtime)
+        {
+            try
+            {
+                BusinessLogicLayer.AddToDoEntry(name, description, deadline, estimationtime);
+            }
+            catch (NullReferenceException nullEx)
+            {
+                return nullEx.Message;
+            }
+            catch (ArgumentException argEx)
+            {
+                return argEx.Message;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return "Unknown exception.";
+            }
+            //TODO: Write "" to browser.
+            return "";
+        }
+
     }
 }
