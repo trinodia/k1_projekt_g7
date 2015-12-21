@@ -38,7 +38,7 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList("test");
+                BusinessLogicLayer.AddToDoList("test", "test desc", null);
                 var toDoList = BusinessLogicLayer.GetToDoListByName("test");
                 var id = toDoList.First().Id;
                 id += 1;

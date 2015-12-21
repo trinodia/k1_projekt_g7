@@ -15,9 +15,9 @@ namespace BusinessLogic
 
             var dbSession = new DataAccessLayer();
 
-            var toDoItem = dbSession.GetToDoListById(id);
+            var toDoItem = dbSession.GetToDoById(id);
 
-            return toDoItem.First(); //Rewrite when method only returns a ToDoItem instead of ToDoList;
+            return toDoItem; //Rewrite when method only returns a ToDoItem instead of ToDoList;
         }
 
         public static List<ToDo> GetToDoListByName(string name)
@@ -45,15 +45,10 @@ namespace BusinessLogic
             if (id < 0)
                 throw new ArgumentException("ID can't be negative.");
 
-            if (dbSession.GetToDoListById(id).Count == 0)
+            if (dbSession.GetToDoById(id) == null)
                 throw new ArgumentException("The specified ID could not be found.");
 
-            if (dbSession.GetToDoListById(id).Count > 1)
-                throw new ArgumentException("Multiple todo items matches the given ID.");
-                //TODO: Should not be possible to end up in this condition. What is the correct exception type?
-
-            if (dbSession.GetToDoListById(id).Count == 1)
-                dbSession.DeleteToDoList(id);
+            dbSession.DeleteToDo(id);
         }
 
         public static void AddToDoList(string name, string description, DateTime? deadline, int estimationtime = -1)
