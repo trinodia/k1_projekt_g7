@@ -114,5 +114,23 @@ namespace Service
             }
         }
 
+        public int GetNumberOfToDoItemsInList(string name, bool finnished)
+        {
+            try
+            {
+                return BusinessLogicLayer.GetNumberOfToDoItemsInList(name, finnished);
+            }
+            catch (ArgumentException argEx)
+            {
+                //TODO: Write argEx.Message to browser;
+                return -1;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return -1;
+            }
+        }
+
     }
 }

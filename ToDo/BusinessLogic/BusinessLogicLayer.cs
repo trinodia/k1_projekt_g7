@@ -128,8 +128,22 @@ namespace BusinessLogic
             return toDoList;
         }
 
-    }
+        public static int GetNumberOfToDoItemsInList(string name, bool finnished)
+        {
+            var dbSession = new DataAccessLayer();
 
+            if (name == null)
+                throw new ArgumentNullException("Name may not be null.");
+
+            var toDoList = dbSession.GetToDoListByName(name);
+
+            if (toDoList == null)
+                throw new NullReferenceException("A list with the given name could not be retrieved.");
+
+            // return how many items that was removed
+            return toDoList.RemoveAll(x => x.Finnished == finnished);
+        }
+    }
 
 }
 

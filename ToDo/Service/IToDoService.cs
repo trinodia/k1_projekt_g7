@@ -31,7 +31,9 @@ namespace Service
         [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         List<ToDo> GetToDoListByDone(string name);
 
-
+        [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        int GetNumberOfToDoItemsInList(string name, bool finnished);
 
     }
 }

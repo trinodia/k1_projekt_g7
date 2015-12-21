@@ -31,9 +31,11 @@ namespace Client
                     
                     GetToDoList(channel);
 
-                    AddToDo(channel);
+                    AddToDoList(channel);
 
                     DeleteToDoItem(channel);
+
+                    GetNumberOfToDoItemsInList(channel);
                 }
 
                 Console.WriteLine("Press <ENTER> to terminate");
@@ -55,7 +57,7 @@ namespace Client
             channel.DeleteToDoItem(5);
         }
 
-        private static void AddToDo(IToDoService channel)
+        private static void AddToDoList(IToDoService channel)
         {
             Console.WriteLine("Calling AddToDo via HTTP POST: ");
 
@@ -68,7 +70,7 @@ namespace Client
             }
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by posting a JSON Object to");
-            Console.WriteLine("http://localhost:8000/AddToDo");
+            Console.WriteLine("http://localhost:8000/AddToDoList");
             Console.WriteLine("while this sample is running.");
 
             Console.WriteLine("");
@@ -86,6 +88,22 @@ namespace Client
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by navigating to");
             Console.WriteLine("http://localhost:8000/GetToDoListByName?name=Hamid");
+            Console.WriteLine("in a web browser while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+        private static void GetNumberOfToDoItemsInList(IToDoService channel)
+        {
+            Console.WriteLine("Calling GetNumberOfToDoItemsInList via HTTP GET: ");
+            var numTodoItemsInList = channel.GetNumberOfToDoItemsInList("Hamid", false);
+            Console.WriteLine("Items in list that are not done: {0}", numTodoItemsInList);
+            numTodoItemsInList = channel.GetNumberOfToDoItemsInList("Hamid", true);
+            Console.WriteLine("Items in list that are done: {0}", numTodoItemsInList);
+
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by navigating to");
+            Console.WriteLine("http://localhost:8000/GetNumberOfToDoItemsInList?name=Hamid&finnished=true");
             Console.WriteLine("in a web browser while this sample is running.");
 
             Console.WriteLine("");
