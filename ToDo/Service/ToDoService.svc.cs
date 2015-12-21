@@ -2,6 +2,8 @@
 using DataModel;
 using BusinessLogic;
 using System;
+using System.IO;
+using System.ServiceModel.Web;
 
 namespace Service
 {
@@ -27,11 +29,11 @@ namespace Service
         }
         }
 
-        public string AddToDoList(string name)
+        public string AddToDoList(string name, string description, DateTime? deadline, int estimationtime)
         {
             try
             {
-                BusinessLogicLayer.AddToDoList(name);
+                BusinessLogicLayer.AddToDoList(name, description, deadline, estimationtime);
             }
             catch(ArgumentException argEx)
             {
@@ -40,7 +42,7 @@ namespace Service
             catch (Exception)
             {
                 //TODO: Write "Unknown exception." to browser.
-                return "Unknown exception.";
+                return "Unhandled exception.";
             }
             //TODO: Write "" to browser.
             return "";
@@ -59,7 +61,7 @@ namespace Service
             catch (Exception)
             {
                 //TODO: Write "Unknown exception." to browser.
-                return "Unknown exception.";
+                return "Unhandled exception.";
             }
             //TODO: Write "" to browser.
             return "";

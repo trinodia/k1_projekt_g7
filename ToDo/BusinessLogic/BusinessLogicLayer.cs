@@ -27,18 +27,24 @@ namespace BusinessLogic
         {
             //TODO:Add error handling
             var dbSession = new DataAccessLayer();
-            dbSession.DeleteToDoList(id);
+            dbSession.DeleteToDo(id);
         }
 
-        public static void AddToDoList(string name)
+        public static void AddToDoList(string name, string description, DateTime? deadline, int estimationtime = -1)
         {
             if (name == null)
-                throw new NullReferenceException("The lists name may not be null.");
+                throw new ArgumentNullException("The lists name may not be null.");
+
+            if (description == null)
+                throw new ArgumentNullException("The lists description may not be null.");
 
             if (name.Length < 6)
                 throw new ArgumentException("The name of the list most be at least 6 chars.");
 
             var dbSession = new DataAccessLayer();
+
+            // If no deadline is provided, set a default deadline
+            deadline = deadline ?? new DateTime(1800, 1, 1, 0, 0, 0);
 
             if (dbSession.GetToDoListByName(name).Count > 0)
                 throw new ArgumentException("A list with this name already exists and the name of a list most be unique.");
@@ -46,11 +52,11 @@ namespace BusinessLogic
             var newToDo = new ToDo()
             {
                 Name = name,
-                Description = "",
+                Description = description,
                 Finnished = false,
                 CreatedDate = DateTime.Now,
-                DeadLine = DateTime.Now,
-                EstimationTime = -1
+                DeadLine = (DateTime)deadline,
+                EstimationTime = estimationtime
             };
 
             dbSession.AddToDo(newToDo);

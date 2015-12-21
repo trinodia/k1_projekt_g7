@@ -8,50 +8,67 @@ namespace UnitTests
     public class BusinessLogicLayerTests
     {
         [TestMethod]
-        public void AddToDoListTest()
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoList_NameLessThanSixChars_ThrowsArgumentException()
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                try
-                {
-                    BusinessLogic.BusinessLogicLayer.AddToDoList("test");
-                }
-                catch (ArgumentException ex)
-                {
-                    Assert.IsTrue(ex.Message == "The name of the list most be at least 6 chars.");
-                }
+                BusinessLogic.BusinessLogicLayer.AddToDoList("test", "test description", DateTime.Now);
+            }
+        }
 
-                try
-                {
-                    // This test requires that this list is created
-                    BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels lista 2");
-                }
-                catch (ArgumentException ex)
-                {
-                    Assert.IsTrue(ex.Message == "A list with this name already exists and the name of a list most be unique.");
-                }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoList_NameNotUnique_ThrowsArgumentException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels list", "Daniels list description", DateTime.Now, 10);
+            }
+        }
 
-                try
-                {
-                    BusinessLogic.BusinessLogicLayer.AddToDoList(null);
-                }
-                catch (NullReferenceException ex)
-                {
-                    Assert.IsTrue(ex.Message == "The lists name may not be null.");
-                }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddToDoList_NameIsNull_ThrowsArgumentException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.AddToDoList(null, "Daniels list description", DateTime.Now, 10);
+            }
+        }
 
-                try
-                {
-                    BusinessLogic.BusinessLogicLayer.AddToDoList("Unique name");
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddToDoList_DescriptionIsNull_ThrowsArgumentException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels list", null, DateTime.Now, 10);
+            }
+        }
+
+        [TestMethod]
+        public void AddToDoList_DeadlineIsNull_IsAcceptedAndWorks()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels unique list", "Daniels list description", null, 10);
+                Assert.IsTrue(true);
+            }
+        }
+
+
+        [TestMethod]
+        public void AddToDoList_AllOk_IsTrue()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                    BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels unique list", "Daniels list description", DateTime.Now, 10);
                     // this test will not be reached if we do not succeed with creating the list
                     Assert.IsTrue(true);
-                }
-                catch (NullReferenceException ex)
-                {
-                    Assert.IsTrue(ex.Message == "The lists name may not be null.");
-                }
             }
-
         }
+
+
     }
 }

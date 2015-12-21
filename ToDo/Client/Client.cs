@@ -3,25 +3,32 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Description;
 using Service;
+using System.IO;
+using System.Collections.Specialized;
 
 namespace Client
 {
     internal class Client
     {
+        public static object HttpUtility { get; private set; }
+
         private static void Main(string[] args)
         {
             WebServiceHost host = new WebServiceHost(typeof(ToDoService), new Uri("http://localhost:8000/"));
             try
             {
-                ServiceEndpoint ep = host.AddServiceEndpoint(typeof(IToDoService), new WebHttpBinding(), "");
+
+                var binding = new WebHttpBinding();
+                binding.TransferMode = TransferMode.Streamed;
+
+                ServiceEndpoint ep = host.AddServiceEndpoint(typeof(IToDoService), binding, "");
                 host.Open();
 
                 using (ChannelFactory<IToDoService> cf = new ChannelFactory<IToDoService>(new WebHttpBinding(),"http://localhost:8000"))
                 {
                     cf.Endpoint.Behaviors.Add(new WebHttpBehavior());
-
                     IToDoService channel = cf.CreateChannel();
-
+                    
                     GetToDoList(channel);
 
                     AddToDo(channel);
@@ -51,7 +58,8 @@ namespace Client
         private static void AddToDo(IToDoService channel)
         {
             Console.WriteLine("Calling AddToDo via HTTP POST: ");
-            var error = channel.AddToDoList("Daniels lista 2");
+
+            var error = channel.AddToDoList("Daniels list", "Daniels list description", DateTime.Now, 10);
 
             if (!string.IsNullOrEmpty(error))
             {

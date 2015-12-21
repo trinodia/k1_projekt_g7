@@ -1,7 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Collections.Generic;
 using DataModel;
+
+/*
+Refactoring: 
+1- UpdateToDoList changed name to UpdateToDo
+2- GetToDoListbyId changed name GetToDoById returns ToDo and not list of ToDo
+
+*/
 
 namespace DataAccess
 {
@@ -21,12 +28,8 @@ namespace DataAccess
             connString = ConnectionString;
         }
 
-        public DataAccessLayer(string _connString)
-        {
-            connString = _connString;            
-        }
         /// <summary>
-        /// Add an ToDo
+        /// AddToDo
         /// </summary>
         /// <param name="toDo"></param>
         public void AddToDo(ToDo toDo)
@@ -38,9 +41,9 @@ namespace DataAccess
                     //using parametirized query
                     string sqlInserString =
                     "INSERT INTO ToDoList (Description, Name, CreatedDate, DeadLine, EstimationTime, Finnished) VALUES ( @description, @name, @CreatedDate, @deadLine, @estimationTime, @finnished)";
-                   
+
                     conn = new SqlConnection(connString);
-                    
+
                     command = new SqlCommand();
                     command.Connection = conn;
                     command.Connection.Open();
@@ -51,13 +54,13 @@ namespace DataAccess
                     SqlParameter createdParam = new SqlParameter("@createdDate", toDo.CreatedDate);
                     SqlParameter deadLineParam = new SqlParameter("@deadLine", toDo.DeadLine);
                     SqlParameter estimateParam = new SqlParameter("@estimationTime", toDo.EstimationTime);
-                    SqlParameter flagParam = new SqlParameter("@finnished", toDo.Finnished ? 1:0);
+                    SqlParameter flagParam = new SqlParameter("@finnished", toDo.Finnished ? 1 : 0);
 
 
-                    command.Parameters.AddRange(new SqlParameter[]{ descriptionParam, userParam, createdParam, deadLineParam, estimateParam, flagParam });
+                    command.Parameters.AddRange(new SqlParameter[] { descriptionParam, userParam, createdParam, deadLineParam, estimateParam, flagParam });
                     command.ExecuteNonQuery();
                     command.Connection.Close();
-                    
+
                 }
             }
             catch (Exception ex)
@@ -65,11 +68,12 @@ namespace DataAccess
                 ErrorMessage = ex.Message;
             }
         }
+
         /// <summary>
-        /// Update ToDo
+        /// UpdateToDo
         /// </summary>
         /// <param name="toDo"></param>
-        public void UpdateToDoList(ToDo toDo)
+        public void UpdateToDo(ToDo toDo)
         {
             try
             {
@@ -99,14 +103,15 @@ namespace DataAccess
             }
             catch (Exception ex)
             {
-               ErrorMessage = ex.Message;
+                ErrorMessage = ex.Message;
             }
         }
+
         /// <summary>
-        /// Delete ToDo
+        /// DeleteToDo
         /// </summary>
         /// <param name="ID"></param>
-        public void DeleteToDoList(int ID)
+        public void DeleteToDo(int ID)
         {
             try
             {
@@ -134,7 +139,7 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Get ToDo list
+        /// GetToDoList
         /// </summary>
         /// <returns></returns>
         public List<ToDo> GetToDoList()
@@ -167,7 +172,7 @@ namespace DataAccess
                     command.Connection.Close();
                     return toDoList;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -179,16 +184,16 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Get ToDo list
+        ///  GetToDoById
         /// </summary>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public List<ToDo> GetToDoListById(int id)
+        public ToDo GetToDoById(int id)
         {
             try
             {
                 using (conn)
                 {
-                    toDoList = new List<ToDo>();
 
                     conn = new SqlConnection(connString);
 
@@ -197,21 +202,18 @@ namespace DataAccess
                     command.Connection.Open();
 
                     SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
+                    reader.Read();
+                    ToDo toDo = new ToDo();
+                    toDo.Id = reader.GetInt32(reader.GetOrdinal("ID"));
+                    toDo.Description = reader.GetString(reader.GetOrdinal("Description"));
+                    toDo.Name = reader.GetString(reader.GetOrdinal("Name"));
+                    toDo.DeadLine = reader.GetDateTime(reader.GetOrdinal("DeadLine"));
+                    toDo.CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"));
+                    toDo.EstimationTime = reader.GetInt32(reader.GetOrdinal("EstimationTime"));
+                    toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
 
-                        ToDo toDo = new ToDo();
-                        toDo.Id = reader.GetInt32(reader.GetOrdinal("ID"));
-                        toDo.Description = reader.GetString(reader.GetOrdinal("Description"));
-                        toDo.Name = reader.GetString(reader.GetOrdinal("Name"));
-                        toDo.DeadLine = reader.GetDateTime(reader.GetOrdinal("DeadLine"));
-                        toDo.CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"));
-                        toDo.EstimationTime = reader.GetInt32(reader.GetOrdinal("EstimationTime"));
-                        toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
-                        toDoList.Add(toDo);
-                    }
                     command.Connection.Close();
-                    return toDoList;
+                    return toDo;
                 }
 
             }
@@ -224,6 +226,11 @@ namespace DataAccess
 
         }
 
+        /// <summary>
+        ///  GetToDoListByName
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public List<ToDo> GetToDoListByName(string name)
         {
             try
