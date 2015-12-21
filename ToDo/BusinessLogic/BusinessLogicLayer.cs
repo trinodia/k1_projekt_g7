@@ -3,11 +3,23 @@ using DataModel;
 using DataAccess;
 using System;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 
 namespace BusinessLogic
 {
     public class BusinessLogicLayer
     {
+        public static ToDo GetToDoItemById(int id)
+        {
+            //TODO: Add exception handling;
+
+            var dbSession = new DataAccessLayer();
+
+            var toDoItem = dbSession.GetToDoListById(id);
+
+            return toDoItem.First(); //Rewrite when method only returns a ToDoItem instead of ToDoList;
+        }
+
         public static List<ToDo> GetToDoListByName(string name)
         {
             var dbSession = new DataAccessLayer();
@@ -23,11 +35,25 @@ namespace BusinessLogic
             return toDoList;
         }
 
-        public static void DeleteToDoItem(int id)
+        public static void DeleteToDoItemById(int id)
         {
-            //TODO:Add error handling
             var dbSession = new DataAccessLayer();
-            dbSession.DeleteToDo(id);
+
+            if (id == 0)
+                throw new ArgumentException("ID can't be 0.");
+
+            if (id < 0)
+                throw new ArgumentException("ID can't be negative.");
+
+            if (dbSession.GetToDoListById(id).Count == 0)
+                throw new ArgumentException("The specified ID could not be found.");
+
+            if (dbSession.GetToDoListById(id).Count > 1)
+                throw new ArgumentException("Multiple todo items matches the given ID.");
+                //TODO: Should not be possible to end up in this condition. What is the correct exception type?
+
+            if (dbSession.GetToDoListById(id).Count == 1)
+                dbSession.DeleteToDoList(id);
         }
 
         public static void AddToDoList(string name, string description, DateTime? deadline, int estimationtime = -1)
@@ -61,5 +87,55 @@ namespace BusinessLogic
 
             dbSession.AddToDo(newToDo);
         }
+
+        public static void AddToDoEntry(string name,string description, DateTime deadline, int estimationtime)
+        {
+            if (name == null && description == null && deadline == null) //TODO: Should be logic OR and one error message per incorrect param?
+                throw new NullReferenceException("The Entry must be complete.");
+
+            if (estimationtime <=  0)
+                throw new ArgumentException("The Estimated time must be positive.");
+
+            var dbSession = new DataAccessLayer();
+
+            if (dbSession.GetToDoListByName(name).Count < 1 )
+                throw new ArgumentException("A list must be created first.");
+            //if (dbSession.GetToDoListByName(name).First   // Ersätta den första tomma ??
+
+            var newToDo = new ToDo()
+            {
+                Name = name,
+                Description = description,
+                Finnished = false,
+                CreatedDate = DateTime.Now,
+                DeadLine = deadline,
+                EstimationTime = estimationtime
+            };
+
+            dbSession.AddToDo(newToDo);
+        }
+
+        public static List<ToDo> GetToDoListByDone(string name)
+        {
+            var dbSession = new DataAccessLayer();
+
+            var toDoList = dbSession.GetToDoListByName(name);
+
+            if (toDoList == null)
+                throw new NullReferenceException("A list with the given name could not be retrieved.");
+
+            if (!toDoList.Any())
+                throw new ArgumentException("A list with the given name could not be found.");
+
+
+            toDoList.RemoveAll(x => x.Finnished = false);
+
+            return toDoList;
+        }
+
     }
+
+
 }
+
+

@@ -25,8 +25,8 @@ namespace Service
             catch (Exception)
             {
                 //TODO: Write "Unknown exception." to browser.
-            return toDoList;
-        }
+                return toDoList;
+            }
         }
 
         public string AddToDoList(string name, string description, DateTime? deadline, int estimationtime)
@@ -35,7 +35,11 @@ namespace Service
             {
                 BusinessLogicLayer.AddToDoList(name, description, deadline, estimationtime);
             }
-            catch(ArgumentException argEx)
+            catch (NullReferenceException nullEx)
+            {
+                return nullEx.Message;
+            }
+            catch (ArgumentException argEx)
             {
                 return argEx.Message;
             }
@@ -52,7 +56,7 @@ namespace Service
         {
             try
             {
-                BusinessLogicLayer.DeleteToDoItem(id);
+                BusinessLogicLayer.DeleteToDoItemById(id);
             }
             catch (ArgumentException argEx)
             {
@@ -66,5 +70,49 @@ namespace Service
             //TODO: Write "" to browser.
             return "";
         }
+
+        public string AddToDoEntry(string name, string description, DateTime deadline, int estimationtime)
+        {
+            try
+            {
+                BusinessLogicLayer.AddToDoEntry(name, description, deadline, estimationtime);
+            }
+            catch (NullReferenceException nullEx)
+            {
+                return nullEx.Message;
+            }
+            catch (ArgumentException argEx)
+            {
+                return argEx.Message;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return "Unknown exception.";
+            }
+            //TODO: Write "" to browser.
+            return "";
+        }
+
+        public List<ToDo> GetToDoListByDone(string name)
+        {
+            var toDoList = new List<ToDo>();
+            try
+            {
+                toDoList = BusinessLogicLayer.GetToDoListByName(name);
+                return toDoList;
+            }
+            catch (ArgumentException argEx)
+            {
+                //TODO: Write argEx.Message to browser;
+                return toDoList;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return toDoList;
+            }
+        }
+
     }
 }

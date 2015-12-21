@@ -8,6 +8,21 @@ Daily stand-up scheduled to weekdays 20.00
 
 Sprint planning/retrospective scheduled to Sundays 20.00
 
+##Retro/Planning meeting conducted 20/12 20:00
+
+####Retrospecive
+ * Gustav had completed two items
+ * James has testing to still do but is otherwise done with his two items
+ * Daniel still has one item to start on and another to rewrite
+ * A standard has been set for testing and a testing platform with a tool for Google Chrome has been selected
+
+####Planning
+ * We decided to speed up coding and added the remaining user stories to the weeks sprint
+ * Tests created in the REST test client in Chrome should be exported and added to the GitHub repository when done
+ * Two items each were assigned of the remaining user stories and they should be completed before/on 27th December
+ * It was decided that the last sprint following this one will be dedicated to refactoring and testing leaving the final days before delivery for finalizing the complete delivery
+
+
 ###Project time plan:
 
 #####v.50 – Initial planning
