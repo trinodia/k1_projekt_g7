@@ -123,6 +123,7 @@ namespace BusinessLogic
                 throw new ArgumentException("A list with the given name could not be found.");
 
 
+             
             toDoList.RemoveAll(x => x.Finnished == false);
 
             return toDoList;
@@ -143,6 +144,37 @@ namespace BusinessLogic
             // return how many items that was removed
             return toDoList.RemoveAll(x => x.Finnished == finnished);
         }
+
+        public static void UpdateToDoItem(ToDo todoitem)
+        {
+            //TODO: Add exception handling;
+
+            var dbSession = new DataAccessLayer();
+
+            dbSession.UpdateToDo(todoitem);
+            
+            //return Errorcode of shit if needed; 
+        }
+
+        public static List<ToDo> GetToDoListByVIP(string name)
+        {
+            var dbSession = new DataAccessLayer();
+
+            var toDoList = dbSession.GetToDoListByName(name); // Just getting by Name, or does we want ALL Lists? 
+
+            if (toDoList == null)
+                throw new NullReferenceException("A list with the given name could not be retrieved.");
+
+            if (!toDoList.Any())
+                throw new ArgumentException("A list with the given name could not be found.");
+
+            //toDoList.RemoveAll(x => x.Finnished == false);
+             
+            toDoList.RemoveAll(x => x.Description.EndsWith("!") != true);
+            return toDoList;
+        }
+
+
     }
 
 }

@@ -40,6 +40,11 @@ namespace Client
                     AddToDoEntry(channel);
 
                     GetToDoListByDone(channel);
+
+                    UpdateToDoItem(channel);
+
+                    GetToDoListByVIP(channel);
+
                 }
 
                 Console.WriteLine("Press <ENTER> to terminate");
@@ -150,6 +155,52 @@ namespace Client
 
             Console.WriteLine("");
         }
+
+        private static void UpdateToDoItem(IToDoService channel)
+        {
+            int id = 3;
+            Console.WriteLine("Calling UpdateToDoItem via HTTP POST: ");
+            var toDoList = channel.GetToDoListByName("");
+            var todoitem = toDoList[id];
+            todoitem.DeadLine = DateTime.UtcNow;
+            string temp = todoitem.DeadLine.ToString("hh:mm:ss");
+            todoitem.Description = "Updated @ " + temp;
+            channel.UpdateToDoItem(todoitem);
+            /*
+            if (!string.IsNullOrEmpty(error))
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Error: " + error);
+            }
+            */
+            Console.WriteLine("Updated ID # {0} with {1}",id,  temp);
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by posting a JSON Object to");
+            Console.WriteLine("http://localhost:8000/UpdateToDoItem");
+            Console.WriteLine("while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+        private static void GetToDoListByVIP(IToDoService channel)
+        {
+            Console.WriteLine("Calling GetToDoListByVIP via HTTP GET: ");
+            var toDoList = channel.GetToDoListByVIP("Hamid");
+            foreach (var toDo in toDoList)
+            {
+                Console.WriteLine("   Output: {0}", toDo.Description);
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by navigating to");
+            Console.WriteLine("http://localhost:8000/GetToDoListByVIP?name=Hamid");
+            Console.WriteLine("in a web browser while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+
+        
 
     }
 }
