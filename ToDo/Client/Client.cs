@@ -36,6 +36,10 @@ namespace Client
                     DeleteToDoItem(channel);
 
                     GetNumberOfToDoItemsInList(channel);
+
+                    AddToDoEntry(channel);
+
+                    GetToDoListByDone(channel);
                 }
 
                 Console.WriteLine("Press <ENTER> to terminate");
@@ -108,5 +112,44 @@ namespace Client
 
             Console.WriteLine("");
         }
+
+        private static void AddToDoEntry(IToDoService channel)
+        {
+            Console.WriteLine("Calling AddToDoEntry via HTTP POST: ");
+
+            //string AddToDoEntry(string name, string description, DateTime deadline, int estimationtime)
+            var error = channel.AddToDoEntry("Daniels list", "Daniels todo Thingie", DateTime.Now, 10);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Error: " + error);
+            }
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by posting a JSON Object to");
+            Console.WriteLine("http://localhost:8000/AddToDoEntry");
+            Console.WriteLine("while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+        private static void GetToDoListByDone(IToDoService channel)
+        {
+            //List<ToDo> GetToDoListByDone(string name)
+            Console.WriteLine("Calling GetToDoListByDone via HTTP GET: ");
+            var toDoList = channel.GetToDoListByDone("Hamid");
+            foreach (var toDo in toDoList)
+            {
+                Console.WriteLine("   Output: {0}, {1}", toDo.Description, toDo.Finnished);
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by navigating to");
+            Console.WriteLine("http://localhost:8000/GetToDoListByDone?name=Hamid");
+            Console.WriteLine("in a web browser while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
     }
 }

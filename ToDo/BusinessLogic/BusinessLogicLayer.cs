@@ -123,7 +123,7 @@ namespace BusinessLogic
                 throw new ArgumentException("A list with the given name could not be found.");
 
 
-            toDoList.RemoveAll(x => x.Finnished = false);
+            toDoList.RemoveAll(x => x.Finnished == false);
 
             return toDoList;
         }

@@ -99,7 +99,7 @@ namespace Service
             var toDoList = new List<ToDo>();
             try
             {
-                toDoList = BusinessLogicLayer.GetToDoListByName(name);
+                toDoList = BusinessLogicLayer.GetToDoListByDone(name);
                 return toDoList;
             }
             catch (ArgumentException argEx)
