@@ -29,11 +29,22 @@ namespace Client
                     
                     GetToDoList(channel);
 
-                    AddToDo(channel);
+                    AddToDoList(channel);
 
                     DeleteToDoItem(channel);
 
                     FinishToDoItem(channel);
+
+                    GetNumberOfToDoItemsInList(channel);
+
+                    AddToDoEntry(channel);
+
+                    GetToDoListByDone(channel);
+
+                    UpdateToDoItem(channel);
+
+                    GetToDoListByVIP(channel);
+
                 }
 
                 Console.WriteLine("Press <ENTER> to terminate");
@@ -63,7 +74,7 @@ namespace Client
             channel.FinishToDoItem(id);
         }
 
-        private static void AddToDo(IToDoService channel)
+        private static void AddToDoList(IToDoService channel)
         {
             Console.WriteLine("Calling AddToDo via HTTP POST: ");
 
@@ -76,7 +87,7 @@ namespace Client
             }
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by posting a JSON Object to");
-            Console.WriteLine("http://localhost:8000/AddToDo");
+            Console.WriteLine("http://localhost:8000/AddToDoList");
             Console.WriteLine("while this sample is running.");
 
             Console.WriteLine("");
@@ -98,5 +109,106 @@ namespace Client
 
             Console.WriteLine("");
         }
+
+        private static void GetNumberOfToDoItemsInList(IToDoService channel)
+        {
+            Console.WriteLine("Calling GetNumberOfToDoItemsInList via HTTP GET: ");
+            var numTodoItemsInList = channel.GetNumberOfToDoItemsInList("Hamid", false);
+            Console.WriteLine("Items in list that are not done: {0}", numTodoItemsInList);
+            numTodoItemsInList = channel.GetNumberOfToDoItemsInList("Hamid", true);
+            Console.WriteLine("Items in list that are done: {0}", numTodoItemsInList);
+
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by navigating to");
+            Console.WriteLine("http://localhost:8000/GetNumberOfToDoItemsInList?name=Hamid&finnished=true");
+            Console.WriteLine("in a web browser while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+        private static void AddToDoEntry(IToDoService channel)
+        {
+            Console.WriteLine("Calling AddToDoEntry via HTTP POST: ");
+
+            //string AddToDoEntry(string name, string description, DateTime deadline, int estimationtime)
+            var error = channel.AddToDoEntry("Daniels list", "Daniels todo Thingie", DateTime.Now, 10);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Error: " + error);
+            }
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by posting a JSON Object to");
+            Console.WriteLine("http://localhost:8000/AddToDoEntry");
+            Console.WriteLine("while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+        private static void GetToDoListByDone(IToDoService channel)
+        {
+            //List<ToDo> GetToDoListByDone(string name)
+            Console.WriteLine("Calling GetToDoListByDone via HTTP GET: ");
+            var toDoList = channel.GetToDoListByDone("Hamid");
+            foreach (var toDo in toDoList)
+            {
+                Console.WriteLine("   Output: {0}, {1}", toDo.Description, toDo.Finnished);
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by navigating to");
+            Console.WriteLine("http://localhost:8000/GetToDoListByDone?name=Hamid");
+            Console.WriteLine("in a web browser while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+        private static void UpdateToDoItem(IToDoService channel)
+        {
+            int id = 3;
+            Console.WriteLine("Calling UpdateToDoItem via HTTP POST: ");
+            var toDoList = channel.GetToDoListByName("");
+            var todoitem = toDoList[id];
+            todoitem.DeadLine = DateTime.UtcNow;
+            string temp = todoitem.DeadLine.ToString("hh:mm:ss");
+            todoitem.Description = "Updated @ " + temp;
+            channel.UpdateToDoItem(todoitem);
+            /*
+            if (!string.IsNullOrEmpty(error))
+            {
+            Console.WriteLine("");
+                Console.WriteLine("Error: " + error);
+        }
+            */
+            Console.WriteLine("Updated ID # {0} with {1}",id,  temp);
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by posting a JSON Object to");
+            Console.WriteLine("http://localhost:8000/UpdateToDoItem");
+            Console.WriteLine("while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+        private static void GetToDoListByVIP(IToDoService channel)
+        {
+            Console.WriteLine("Calling GetToDoListByVIP via HTTP GET: ");
+            var toDoList = channel.GetToDoListByVIP("Hamid");
+            foreach (var toDo in toDoList)
+            {
+                Console.WriteLine("   Output: {0}", toDo.Description);
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by navigating to");
+            Console.WriteLine("http://localhost:8000/GetToDoListByVIP?name=Hamid");
+            Console.WriteLine("in a web browser while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+
+        
+
     }
 }

@@ -99,7 +99,64 @@ namespace Service
             var toDoList = new List<ToDo>();
             try
             {
-                toDoList = BusinessLogicLayer.GetToDoListByName(name);
+                toDoList = BusinessLogicLayer.GetToDoListByDone(name);
+                return toDoList;
+            }
+            catch (ArgumentException argEx)
+            {
+                //TODO: Write argEx.Message to browser;
+                return toDoList;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return toDoList;
+            }
+        }
+
+        public int GetNumberOfToDoItemsInList(string name, bool finnished)
+        {
+            try
+            {
+                return BusinessLogicLayer.GetNumberOfToDoItemsInList(name, finnished);
+            }
+            catch (ArgumentException argEx)
+            {
+                //TODO: Write argEx.Message to browser;
+                return -1;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return -1;
+            }
+        }
+
+        public void UpdateToDoItem(ToDo todoitem)
+        {
+            try
+            {
+                 BusinessLogicLayer.UpdateToDoItem(todoitem);
+                
+            }
+            catch (ArgumentException argEx)
+            {
+                //TODO: Write argEx.Message to browser;
+                //return toDoList;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                //return toDoList;
+            }
+        }
+
+        public List<ToDo> GetToDoListByVIP(string name)
+        {
+            var toDoList = new List<ToDo>();
+            try
+            {
+                toDoList = BusinessLogicLayer.GetToDoListByVIP(name);
                 return toDoList;
             }
             catch (ArgumentException argEx)
