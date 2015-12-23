@@ -3,8 +3,6 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Description;
 using Service;
-using System.IO;
-using System.Collections.Specialized;
 
 namespace Client
 {
@@ -34,6 +32,8 @@ namespace Client
                     AddToDo(channel);
 
                     DeleteToDoItem(channel);
+
+                    FinishToDoItem(channel);
                 }
 
                 Console.WriteLine("Press <ENTER> to terminate");
@@ -51,8 +51,16 @@ namespace Client
 
         private static void DeleteToDoItem(IToDoService channel)
         {
+            const int id = 5;
             Console.WriteLine("Calling DeleteToDoItem via HTTP DELETE: ");
-            channel.DeleteToDoItem(5);
+            channel.DeleteToDoItem(id);
+        }
+
+        private static void FinishToDoItem(IToDoService channel)
+        {
+            const int id = 9;
+            Console.WriteLine("Calling FinishToDoItem via HTTP POST: ");
+            channel.FinishToDoItem(id);
         }
 
         private static void AddToDo(IToDoService channel)

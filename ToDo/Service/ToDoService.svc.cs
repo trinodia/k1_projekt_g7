@@ -114,5 +114,27 @@ namespace Service
             }
         }
 
+        public string FinishToDoItem(int id)
+        {
+            try
+            {
+                BusinessLogicLayer.FinishToDoItem(id);
+            }
+            catch (NullReferenceException nullEx)
+            {
+                return nullEx.Message;
+            }
+            catch (ArgumentException argEx)
+            {
+                return argEx.Message;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return "Unknown exception.";
+            }
+            //TODO: Write "" to browser.
+            return "";
+        }
     }
 }

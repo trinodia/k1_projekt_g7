@@ -2,7 +2,6 @@
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using DataModel;
-using System.IO;
 using System;
 
 
@@ -31,7 +30,9 @@ namespace Service
         [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         List<ToDo> GetToDoListByDone(string name);
 
-
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        string FinishToDoItem(int id);
 
     }
 }

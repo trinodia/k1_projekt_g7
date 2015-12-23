@@ -3,7 +3,6 @@ using DataModel;
 using DataAccess;
 using System;
 using System.Linq;
-using System.Runtime.Remoting.Channels;
 
 namespace BusinessLogic
 {
@@ -49,6 +48,29 @@ namespace BusinessLogic
                 throw new ArgumentException("The specified ID could not be found.");
 
             dbSession.DeleteToDo(id);
+        }
+
+        public static void FinishToDoItem(int id)
+        {
+            var dbSession = new DataAccessLayer();
+
+            if (id == 0)
+                throw new ArgumentException("ID can't be 0.");
+
+            if (id < 0)
+                throw new ArgumentException("ID can't be negative.");
+
+            if (dbSession.GetToDoById(id) == null)
+                throw new ArgumentException("The specified ID could not be found.");
+
+            var toDoItemToFinnish = dbSession.GetToDoById(id);
+
+            if (!toDoItemToFinnish.Finnished)
+                toDoItemToFinnish.Finnished = true;
+            else if (toDoItemToFinnish.Finnished)
+                toDoItemToFinnish.Finnished = false;
+
+            dbSession.UpdateToDo(toDoItemToFinnish);
         }
 
         public static void AddToDoList(string name, string description, DateTime? deadline, int estimationtime = -1)
