@@ -238,12 +238,12 @@ namespace Service
             }
         }
 
-        public List<ToDo> GetToDoListOrderedAscendingByDeadline(string name)
+        public List<ToDo> GetToDoListOrderedAscendingByDeadLine(string name)
         {
             var toDoList = new List<ToDo>();
             try
             {
-                toDoList = BusinessLogicLayer.GetToDoListOrderedAscendingByDeadline(name);
+                toDoList = BusinessLogicLayer.GetToDoListOrderedAscendingByDeadLine(name);
                 return toDoList;
             }
             catch (ArgumentException argEx)

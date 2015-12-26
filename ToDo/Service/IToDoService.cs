@@ -56,7 +56,7 @@ namespace Service
 
         [OperationContract]
         [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        List<ToDo> GetToDoListOrderedAscendingByDeadline(string name);
+        List<ToDo> GetToDoListOrderedAscendingByDeadLine(string name);
 
     }
 }

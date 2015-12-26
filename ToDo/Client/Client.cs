@@ -51,7 +51,7 @@ namespace Client
 
                     SetDeadLineToDoItem(channel);
 
-                    GetToDoListOrderedAscendingByDeadline(channel);
+                    GetToDoListOrderedAscendingByDeadLine(channel);
 
                 }
 
@@ -230,12 +230,12 @@ namespace Client
             channel.SetDeadLineToDoItem(id, newDeadLine);
         }
 
-        private static void GetToDoListOrderedAscendingByDeadline(IToDoService channel)
+        private static void GetToDoListOrderedAscendingByDeadLine(IToDoService channel)
         {
             const string listName = "Hamid";
-            Console.WriteLine("Calling GetToDoListOrderedAscendingByDeadline via HTTP GET: ");
+            Console.WriteLine("Calling GetToDoListOrderedAscendingByDeadLine via HTTP GET: ");
 
-            var toDoListOrderedAscendingByDeadline = channel.GetToDoListOrderedAscendingByDeadline(listName);
+            var toDoListOrderedAscendingByDeadline = channel.GetToDoListOrderedAscendingByDeadLine(listName);
 
             foreach (var toDoItem in toDoListOrderedAscendingByDeadline)
             {

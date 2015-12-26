@@ -235,7 +235,7 @@ namespace BusinessLogic
             return toDoList;
         }
 
-        public static List<ToDo> GetToDoListOrderedAscendingByDeadline(string name)
+        public static List<ToDo> GetToDoListOrderedAscendingByDeadLine(string name)
         {
             var dbSession = new DataAccessLayer();
 
@@ -247,9 +247,9 @@ namespace BusinessLogic
             if (!toDoList.Any())
                 throw new ArgumentException("A list with the given name could not be found.");
 
-            var toDoListOrderedAscendingByDeadline = toDoList.OrderBy(o => o.DeadLine).ToList();
+            var toDoListOrderedAscendingByDeadLine = toDoList.OrderBy(o => o.DeadLine).ToList();
 
-            return toDoListOrderedAscendingByDeadline;
+            return toDoListOrderedAscendingByDeadLine;
         }
     }
 
