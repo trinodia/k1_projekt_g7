@@ -92,6 +92,26 @@ namespace BusinessLogic
             dbSession.UpdateToDo(toDoItemToFinnish);
         }
 
+        public static void SetDeadLineToDoItem(int id, DateTime newDeadLine)
+        {
+            var dbSession = new DataAccessLayer();
+
+            if (id == 0)
+                throw new ArgumentException("ID can't be 0.");
+
+            if (id < 0)
+                throw new ArgumentException("ID can't be negative.");
+
+            if (dbSession.GetToDoById(id) == null)
+                throw new ArgumentException("The specified ID could not be found.");
+
+            var toDoItemToUpdateDeadLineFor = dbSession.GetToDoById(id);
+
+            toDoItemToUpdateDeadLineFor.DeadLine = newDeadLine;
+
+            dbSession.UpdateToDo(toDoItemToUpdateDeadLineFor);
+        }
+
         public static void AddToDoList(string name, string description, DateTime? deadline, int estimationtime = -1)
         {
             if (name == null)

@@ -28,7 +28,7 @@ namespace Client
                     cf.Endpoint.Behaviors.Add(new WebHttpBehavior());
 
                     var channel = cf.CreateChannel();
-                    
+
                     GetToDoList(channel);
 
                     AddToDoList(channel);
@@ -48,6 +48,8 @@ namespace Client
                     UpdateToDoItem(channel);
 
                     GetToDoListByVip(channel);
+
+                    SetDeadLineToDoItem(channel);
 
                 }
 
@@ -216,6 +218,14 @@ namespace Client
             Console.WriteLine("in a web browser while this sample is running.");
 
             Console.WriteLine("");
+        }
+
+        private static void SetDeadLineToDoItem(IToDoService channel)
+        {
+            const int id = 9;
+            var newDeadLine = DateTime.Now;
+            Console.WriteLine("Calling SetDeadLineToDoItem via HTTP POST: ");
+            channel.SetDeadLineToDoItem(id, newDeadLine);
         }
 
     }
