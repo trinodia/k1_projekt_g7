@@ -137,6 +137,29 @@ namespace Service
             }
         }
 
+        public string AddToDoEntries(string name, string descriptions, DateTime? deadline, int estimationtime)
+        {
+            try
+            {
+                BusinessLogicLayer.AddToDoEntries(name, descriptions, deadline, estimationtime);
+            }
+            catch (NullReferenceException nullEx)
+            {
+                return nullEx.Message;
+            }
+            catch (ArgumentException argEx)
+            {
+                return argEx.Message;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return "Unhandled exception.";
+            }
+            //TODO: Write "" to browser.
+            return "";
+        }
+
         public List<ToDo> GetToDoListByName(string name)
         {
             var toDoList = new List<ToDo>();
@@ -256,6 +279,49 @@ namespace Service
                 //TODO: Write "Unknown exception." to browser.
                 return toDoList;
             }
+        }
+
+        public TotalEstimation GetTotalEstimation(string name, bool includeFinnished = false)
+        {
+            try
+            {
+                return BusinessLogicLayer.GetTotalEstimation(name, includeFinnished);
+            }
+            catch (NullReferenceException nullEx)
+            {
+                return new TotalEstimation() { Success = false, ErrorMessage = nullEx.Message, ErrorType = nullEx.GetType().ToString() };
+            }
+            catch (ArgumentException argEx)
+            {
+                return new TotalEstimation() { Success = false, ErrorMessage = argEx.Message, ErrorType = argEx.GetType().ToString() };
+            }
+            catch (Exception ex)
+            {
+                return new TotalEstimation() { Success = false, ErrorMessage = "Unknown exception", ErrorType = ex.GetType().ToString() };
+            }
+        }
+
+        public string UpdateToDoItemWithEstimate(int id, int estimationtime)
+        {
+            try
+            {
+               BusinessLogicLayer.UpdateToDoItemWithEstimate(id, estimationtime);
+            }
+            catch (NullReferenceException nullEx)
+            {
+                return nullEx.Message;
+            }
+            catch (ArgumentException argEx)
+            {
+                return argEx.Message;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return "Unknown exception.";
+            }
+            //TODO: Write "" to browser.
+            return "";
         }
     }
 }

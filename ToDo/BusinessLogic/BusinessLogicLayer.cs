@@ -114,10 +114,10 @@ namespace BusinessLogic
 
         public static void AddToDoList(string name, string description, DateTime? deadline, int estimationtime = -1)
         {
-            if (name == null)
+            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("The lists name may not be null.");
 
-            if (description == null)
+            if (string.IsNullOrWhiteSpace(description))
                 throw new ArgumentNullException("The lists description may not be null.");
 
             if (name.Length < 6)
@@ -149,7 +149,7 @@ namespace BusinessLogic
             if (name == null && description == null && deadline == null) //TODO: Should be logic OR and one error message per incorrect param?
                 throw new NullReferenceException("The Entry must be complete.");
 
-            if (estimationtime <=  0)
+            if (estimationtime <= 0)
                 throw new ArgumentException("The Estimated time must be positive.");
 
             var dbSession = new DataAccessLayer();
@@ -169,6 +169,41 @@ namespace BusinessLogic
             };
 
             dbSession.AddToDo(newToDo);
+        }
+
+        public static void AddToDoEntries(string name, string descriptions, DateTime? deadline, int estimationtime)
+        {
+            if(string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("You must supply a name for the list to add items to.");
+
+            if (string.IsNullOrWhiteSpace(descriptions))
+                throw new ArgumentException("You must supply a list of desctiptions to add to the list.");
+
+            var dbSession = new DataAccessLayer();
+
+            if (dbSession.GetToDoListByName(name).Count < 1)
+                throw new ArgumentException("A list must be created first.");
+
+            // If no deadline is provided, set a default deadline
+            deadline = deadline ?? new DateTime(1800, 1, 1, 0, 0, 0);
+
+            string[] descs = descriptions.Split(',');
+
+            foreach (var desc in descs)
+            {
+                var newToDo = new ToDo()
+                {
+                    Name = name,
+                    Description = desc.Trim(),
+                    Finnished = false,
+                    CreatedDate = DateTime.Now,
+                    DeadLine = (DateTime)deadline,
+                    EstimationTime = estimationtime
+                };
+
+                dbSession.AddToDo(newToDo);
+            }
+
         }
 
         public static List<ToDo> GetToDoListByDone(string name)
@@ -235,7 +270,47 @@ namespace BusinessLogic
             return toDoList;
         }
 
-        public static List<ToDo> GetToDoListOrderedAscendingByDeadLine(string name)
+        public static void UpdateToDoItemWithEstimate(int id, int estimationtime)
+        {
+            var dbSession = new DataAccessLayer();
+
+            if (id == 0)
+                throw new ArgumentException("ID can't be 0.");
+
+            if (id < 0)
+                throw new ArgumentException("ID can't be negative.");
+
+            var toDoItem = dbSession.GetToDoById(id);
+
+            if (toDoItem == null)
+                throw new ArgumentException("The specified ID could not be found.");
+
+            toDoItem.EstimationTime = estimationtime;
+
+            dbSession.UpdateToDo(toDoItem);
+        }
+
+        public static TotalEstimation GetTotalEstimation(string name, bool includeFinnished)
+        {
+            var dbSession = new DataAccessLayer();
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("Name may not be null, empty or whitespace.");
+
+            var toDoList = dbSession.GetToDoListByName(name);
+
+            if (toDoList == null)
+                throw new NullReferenceException("A list with the given name could not be retrieved.");
+            if(!includeFinnished)
+                toDoList.RemoveAll(x => x.Finnished);
+
+            var totalEstimation = toDoList.Select(x => x.EstimationTime).Sum();
+
+            return new TotalEstimation() { Success = true, TotalMinutes = totalEstimation, TimeCompleted = DateTime.Now.AddMinutes(totalEstimation) };
+        }
+
+
+        public static List<ToDo> GetToDoListOrderedAscendingByDeadline(string name)
         {
             var dbSession = new DataAccessLayer();
 
