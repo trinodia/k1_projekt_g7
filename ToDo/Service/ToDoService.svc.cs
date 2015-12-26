@@ -151,12 +151,12 @@ namespace Service
             }
         }
 
-        public List<ToDo> GetToDoListByVIP(string name)
+        public List<ToDo> GetToDoListByVip(string name)
         {
             var toDoList = new List<ToDo>();
             try
             {
-                toDoList = BusinessLogicLayer.GetToDoListByVIP(name);
+                toDoList = BusinessLogicLayer.GetToDoListByVip(name);
                 return toDoList;
             }
             catch (ArgumentException argEx)
@@ -176,6 +176,29 @@ namespace Service
             try
             {
                 BusinessLogicLayer.FinishToDoItem(id);
+            }
+            catch (NullReferenceException nullEx)
+            {
+                return nullEx.Message;
+            }
+            catch (ArgumentException argEx)
+            {
+                return argEx.Message;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return "Unknown exception.";
+            }
+            //TODO: Write "" to browser.
+            return "";
+        }
+
+        public string UnFinishToDoItem(int id)
+        {
+            try
+            {
+                BusinessLogicLayer.UnFinishToDoItem(id);
             }
             catch (NullReferenceException nullEx)
             {

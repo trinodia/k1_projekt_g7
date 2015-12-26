@@ -67,7 +67,26 @@ namespace BusinessLogic
 
             if (!toDoItemToFinnish.Finnished)
                 toDoItemToFinnish.Finnished = true;
-            else if (toDoItemToFinnish.Finnished)
+            
+            dbSession.UpdateToDo(toDoItemToFinnish);
+        }
+
+        public static void UnFinishToDoItem(int id)
+        {
+            var dbSession = new DataAccessLayer();
+
+            if (id == 0)
+                throw new ArgumentException("ID can't be 0.");
+
+            if (id < 0)
+                throw new ArgumentException("ID can't be negative.");
+
+            if (dbSession.GetToDoById(id) == null)
+                throw new ArgumentException("The specified ID could not be found.");
+
+            var toDoItemToFinnish = dbSession.GetToDoById(id);
+
+            if (toDoItemToFinnish.Finnished)
                 toDoItemToFinnish.Finnished = false;
 
             dbSession.UpdateToDo(toDoItemToFinnish);
@@ -178,7 +197,7 @@ namespace BusinessLogic
             //return Errorcode of shit if needed; 
         }
 
-        public static List<ToDo> GetToDoListByVIP(string name)
+        public static List<ToDo> GetToDoListByVip(string name)
         {
             var dbSession = new DataAccessLayer();
 
