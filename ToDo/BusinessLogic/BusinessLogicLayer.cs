@@ -235,7 +235,22 @@ namespace BusinessLogic
             return toDoList;
         }
 
+        public static List<ToDo> GetToDoListOrderedAscendingByDeadline(string name)
+        {
+            var dbSession = new DataAccessLayer();
 
+            var toDoList = dbSession.GetToDoListByName(name); // Just getting by Name, or does we want ALL Lists? 
+
+            if (toDoList == null)
+                throw new NullReferenceException("A list with the given name could not be retrieved.");
+
+            if (!toDoList.Any())
+                throw new ArgumentException("A list with the given name could not be found.");
+
+            var toDoListOrderedAscendingByDeadline = toDoList.OrderBy(o => o.DeadLine).ToList();
+
+            return toDoListOrderedAscendingByDeadline;
+        }
     }
 
 }

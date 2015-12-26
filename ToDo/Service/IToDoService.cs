@@ -54,5 +54,9 @@ namespace Service
         [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         string SetDeadLineToDoItem(int id, DateTime newDeadLine);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        List<ToDo> GetToDoListOrderedAscendingByDeadline(string name);
+
     }
 }

@@ -237,5 +237,25 @@ namespace Service
                 return toDoList;
             }
         }
+
+        public List<ToDo> GetToDoListOrderedAscendingByDeadline(string name)
+        {
+            var toDoList = new List<ToDo>();
+            try
+            {
+                toDoList = BusinessLogicLayer.GetToDoListOrderedAscendingByDeadline(name);
+                return toDoList;
+            }
+            catch (ArgumentException argEx)
+            {
+                //TODO: Write argEx.Message to browser;
+                return toDoList;
+            }
+            catch (Exception)
+            {
+                //TODO: Write "Unknown exception." to browser.
+                return toDoList;
+            }
+        }
     }
 }
