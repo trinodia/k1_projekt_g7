@@ -67,10 +67,49 @@ namespace BusinessLogic
 
             if (!toDoItemToFinnish.Finnished)
                 toDoItemToFinnish.Finnished = true;
-            else if (toDoItemToFinnish.Finnished)
+            
+            dbSession.UpdateToDo(toDoItemToFinnish);
+        }
+
+        public static void UnFinishToDoItem(int id)
+        {
+            var dbSession = new DataAccessLayer();
+
+            if (id == 0)
+                throw new ArgumentException("ID can't be 0.");
+
+            if (id < 0)
+                throw new ArgumentException("ID can't be negative.");
+
+            if (dbSession.GetToDoById(id) == null)
+                throw new ArgumentException("The specified ID could not be found.");
+
+            var toDoItemToFinnish = dbSession.GetToDoById(id);
+
+            if (toDoItemToFinnish.Finnished)
                 toDoItemToFinnish.Finnished = false;
 
             dbSession.UpdateToDo(toDoItemToFinnish);
+        }
+
+        public static void SetDeadLineToDoItem(int id, DateTime newDeadLine)
+        {
+            var dbSession = new DataAccessLayer();
+
+            if (id == 0)
+                throw new ArgumentException("ID can't be 0.");
+
+            if (id < 0)
+                throw new ArgumentException("ID can't be negative.");
+
+            if (dbSession.GetToDoById(id) == null)
+                throw new ArgumentException("The specified ID could not be found.");
+
+            var toDoItemToUpdateDeadLineFor = dbSession.GetToDoById(id);
+
+            toDoItemToUpdateDeadLineFor.DeadLine = newDeadLine;
+
+            dbSession.UpdateToDo(toDoItemToUpdateDeadLineFor);
         }
 
         public static void AddToDoList(string name, string description, DateTime? deadline, int estimationtime = -1)
@@ -213,7 +252,7 @@ namespace BusinessLogic
             //return Errorcode of shit if needed; 
         }
 
-        public static List<ToDo> GetToDoListByVIP(string name)
+        public static List<ToDo> GetToDoListByVip(string name)
         {
             var dbSession = new DataAccessLayer();
 
@@ -271,7 +310,22 @@ namespace BusinessLogic
         }
 
 
+        public static List<ToDo> GetToDoListOrderedAscendingByDeadline(string name)
+        {
+            var dbSession = new DataAccessLayer();
 
+            var toDoList = dbSession.GetToDoListByName(name); // Just getting by Name, or does we want ALL Lists? 
+
+            if (toDoList == null)
+                throw new NullReferenceException("A list with the given name could not be retrieved.");
+
+            if (!toDoList.Any())
+                throw new ArgumentException("A list with the given name could not be found.");
+
+            var toDoListOrderedAscendingByDeadline = toDoList.OrderBy(o => o.DeadLine).ToList();
+
+            return toDoListOrderedAscendingByDeadline;
+        }
     }
 
 }

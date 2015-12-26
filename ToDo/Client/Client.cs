@@ -12,20 +12,22 @@ namespace Client
 
         private static void Main(string[] args)
         {
-            WebServiceHost host = new WebServiceHost(typeof(ToDoService), new Uri("http://localhost:8000/"));
+            var host = new WebServiceHost(typeof(ToDoService), new Uri("http://localhost:8000/"));
+
             try
             {
 
-                var binding = new WebHttpBinding();
-                binding.TransferMode = TransferMode.Streamed;
+                var binding = new WebHttpBinding {TransferMode = TransferMode.Streamed};
 
-                ServiceEndpoint ep = host.AddServiceEndpoint(typeof(IToDoService), binding, "");
+                var ep = host.AddServiceEndpoint(typeof(IToDoService), binding, "");
+
                 host.Open();
 
-                using (ChannelFactory<IToDoService> cf = new ChannelFactory<IToDoService>(new WebHttpBinding(),"http://localhost:8000"))
+                using (var cf = new ChannelFactory<IToDoService>(new WebHttpBinding(),"http://localhost:8000"))
                 {
                     cf.Endpoint.Behaviors.Add(new WebHttpBehavior());
-                    IToDoService channel = cf.CreateChannel();
+
+                    var channel = cf.CreateChannel();
                     
                     GetToDoList(channel);
 
@@ -35,6 +37,8 @@ namespace Client
 
                     FinishToDoItem(channel);
 
+                    UnFinishToDoItem(channel);
+
                     GetNumberOfToDoItemsInList(channel);
 
                     AddToDoEntry(channel);
@@ -43,7 +47,11 @@ namespace Client
 
                     UpdateToDoItem(channel);
 
-                    GetToDoListByVIP(channel);
+                    GetToDoListByVip(channel);
+
+                    SetDeadLineToDoItem(channel);
+
+                    GetToDoListOrderedAscendingByDeadline(channel);
 
                     GetTotalEstimation(channel);
 
@@ -77,9 +85,16 @@ namespace Client
 
         private static void FinishToDoItem(IToDoService channel)
         {
-            const int id = 9;
+            const int id = 3;
             Console.WriteLine("Calling FinishToDoItem via HTTP POST: ");
             channel.FinishToDoItem(id);
+        }
+
+        private static void UnFinishToDoItem(IToDoService channel)
+        {
+            const int id = 9;
+            Console.WriteLine("Calling UnFinishToDoItem via HTTP POST: ");
+            channel.UnFinishToDoItem(id);
         }
 
         private static void AddToDoList(IToDoService channel)
@@ -198,10 +213,10 @@ namespace Client
             Console.WriteLine("");
         }
 
-        private static void GetToDoListByVIP(IToDoService channel)
+        private static void GetToDoListByVip(IToDoService channel)
         {
-            Console.WriteLine("Calling GetToDoListByVIP via HTTP GET: ");
-            var toDoList = channel.GetToDoListByVIP("Hamid");
+            Console.WriteLine("Calling GetToDoListByVip via HTTP GET: ");
+            var toDoList = channel.GetToDoListByVip("Hamid");
             foreach (var toDo in toDoList)
             {
                 Console.WriteLine("   Output: {0}", toDo.Description);
@@ -209,7 +224,7 @@ namespace Client
 
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by navigating to");
-            Console.WriteLine("http://localhost:8000/GetToDoListByVIP?name=Hamid");
+            Console.WriteLine("http://localhost:8000/GetToDoListByVip?name=Hamid");
             Console.WriteLine("in a web browser while this sample is running.");
 
             Console.WriteLine("");
@@ -265,7 +280,7 @@ namespace Client
 
             Console.WriteLine("");
         }
-
+            
 
     }
 }
