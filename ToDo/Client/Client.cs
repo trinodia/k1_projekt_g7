@@ -45,6 +45,12 @@ namespace Client
 
                     GetToDoListByVIP(channel);
 
+                    GetTotalEstimation(channel);
+
+                    UpdateToDoItemWithEstimate(channel);
+
+                    AddToDoEntries(channel);
+
                 }
 
                 Console.WriteLine("Press <ENTER> to terminate");
@@ -59,6 +65,8 @@ namespace Client
                 host.Abort();
             }
         }
+
+       
 
         private static void DeleteToDoItem(IToDoService channel)
         {
@@ -207,8 +215,57 @@ namespace Client
             Console.WriteLine("");
         }
 
+        private static void GetTotalEstimation(IToDoService channel)
+        {
+            Console.WriteLine("Calling GetTotalEstimation via HTTP GET: ");
+            var totalEstimation = channel.GetTotalEstimation("Hamid", false);
+            Console.WriteLine("   TotalMinutes: {0}", totalEstimation.TotalMinutes);
+            Console.WriteLine("   TimeCompleted: {0}", totalEstimation.TimeCompleted);
 
-        
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by navigating to");
+            Console.WriteLine("http://localhost:8000/GetTotalEstimation?name=Hamid&includeFinnished=false");
+            Console.WriteLine("in a web browser while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
+        private static void UpdateToDoItemWithEstimate(IToDoService channel)
+        {
+            Console.WriteLine("Calling UpdateToDoItemWithEstimate via HTTP GET: ");
+            var error = channel.UpdateToDoItemWithEstimate(1, 10);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Error: " + error);
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by posting a JSON Object to");
+            Console.WriteLine("http://localhost:8000/UpdateToDoItemWithEstimate");
+            Console.WriteLine("while this sample is running.");
+        }
+
+        private static void AddToDoEntries(IToDoService channel)
+        {
+            Console.WriteLine("Calling AddToDoEntries via HTTP POST: ");
+
+            var error = channel.AddToDoEntries("Daniels list", "Item 1 todo, Item 2 todo, Item 3 todo", DateTime.Now, 10);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Error: " + error);
+            }
+            Console.WriteLine("");
+            Console.WriteLine("This can also be accomplished by posting a JSON Object to");
+            Console.WriteLine("http://localhost:8000/AddToDoEntries");
+            Console.WriteLine("while this sample is running.");
+
+            Console.WriteLine("");
+        }
+
 
     }
 }

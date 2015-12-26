@@ -11,6 +11,7 @@ namespace UnitTests
     public class BusinessLogicLayerTests
     {
         //Use method naming according too: METHODNAME_CONDITION_EXPECTATION
+        //Group tests in a #region named after the method that the tests runs for
 
         #region DeteleToDo
         [TestMethod]
@@ -90,11 +91,52 @@ namespace UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
+        public void AddToDoList_NameIsEmpty_ThrowsArgumentNullException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.AddToDoList("", "Daniels list description", DateTime.Now, 10);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddToDoList_NameIsWhitespace_ThrowsArgumentNullException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.AddToDoList(" ", "Daniels list description", DateTime.Now, 10);
+            }
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void AddToDoList_DescriptionIsNull_ThrowsArgumentNullException()
         {
             using (TransactionScope transaction = new TransactionScope())
             {
                 BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels list", null, DateTime.Now, 10);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddToDoList_DescriptionIsEmpty_ThrowsArgumentNullException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels list", "", DateTime.Now, 10);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddToDoList_DescriptionIsWhitespace_ThrowsArgumentNullException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels list", " ", DateTime.Now, 10);
             }
         }
 
@@ -153,6 +195,61 @@ namespace UnitTests
         }
 
         #endregion
+
+        #region GetTotalEstimation
+
+        [TestMethod]
+        public void GetTotalEstimation_CorrectValuesInReturn_IsTrue()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels unique list", "Daniels list description", DateTime.Now, 10);
+                BusinessLogic.BusinessLogicLayer.AddToDoEntry("Daniels unique list", "Daniels list description 2", DateTime.Now, 10);
+
+                var totalEstimation = BusinessLogicLayer.GetTotalEstimation("Daniels unique list", true);
+
+                Assert.IsTrue(totalEstimation.TotalMinutes == 20);
+
+                // If we are within one minute of correct time, this is correct. Test written like this to ensure it does not fail if test is run at end of one minute causing the test to fail becouse of switch of minute while test is running
+                Assert.IsTrue(totalEstimation.TimeCompleted.Minute - DateTime.Now.AddMinutes(20).Minute <= 1);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetTotalEstimation_NameIsNull_ThrowsArgumentNullException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.GetTotalEstimation(null, false);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetTotalEstimation_NameIsEmpty_ThrowsArgumentNullException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.GetTotalEstimation("", false);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetTotalEstimation_NameIsWhitespace_ThrowsArgumentNullException()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                BusinessLogic.BusinessLogicLayer.GetTotalEstimation(" ", false);
+            }
+        }
+
+        #endregion
+
+
+
+
     }
 
 
