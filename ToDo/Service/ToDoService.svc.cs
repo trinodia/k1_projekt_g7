@@ -160,7 +160,6 @@ namespace Service
             return "";
         }
 
-        public List<ToDo> GetToDoListByDone(string name)
         public List<ToDo> GetToDoListByName(string name)
         {
             var toDoList = new List<ToDo>();

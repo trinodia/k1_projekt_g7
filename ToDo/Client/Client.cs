@@ -280,7 +280,28 @@ namespace Client
 
             Console.WriteLine("");
         }
-            
+
+        private static void SetDeadLineToDoItem(IToDoService channel)
+        {
+            const int id = 9;
+            var newDeadLine = DateTime.Now;
+            Console.WriteLine("Calling SetDeadLineToDoItem via HTTP POST: ");
+            channel.SetDeadLineToDoItem(id, newDeadLine);
+        }
+
+        private static void GetToDoListOrderedAscendingByDeadline(IToDoService channel)
+        {
+            const string listName = "Hamid";
+            Console.WriteLine("Calling GetToDoListOrderedAscendingByDeadline via HTTP GET: ");
+
+            var toDoListOrderedAscendingByDeadline = channel.GetToDoListOrderedAscendingByDeadline(listName);
+
+            foreach (var toDoItem in toDoListOrderedAscendingByDeadline)
+            {
+                Console.WriteLine("ID: {0} \t Description: {1} \t Deadline: {2} \t ", toDoItem.Id, toDoItem.Description, toDoItem.DeadLine);
+            }
+        }
+
 
     }
 }
