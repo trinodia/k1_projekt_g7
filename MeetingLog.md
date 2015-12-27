@@ -22,6 +22,18 @@ Sprint planning/retrospective scheduled to Sundays 20.00
  * Two items each were assigned of the remaining user stories and they should be completed before/on 27th December
  * It was decided that the last sprint following this one will be dedicated to refactoring and testing leaving the final days before delivery for finalizing the complete delivery
 
+##Retro/Planning meeting conducted 27/12 20:00
+
+####Retrospecive
+ * All initial workitems are completed in the trello board
+ * Test with exporting/importing from test client in Chrome has been done and is verified to work
+
+####Planning
+ * UnitTests should be written for the service methods that lacks those
+ * We decided to use a unified validation method for the ToDo item that can be called from the methods that takes a ToDo item as input
+ * Serverpart of the current client app should be moved out of the client and put in an own Server console application
+ * The clientpart of the current client app should remain but be run as an optional part of the solution if needed
+ * Help page for the web based part of the service should be updated with descriptions and other information needed for developers implimenting the service
 
 ###Project time plan:
 
