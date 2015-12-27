@@ -27,6 +27,7 @@ Sprint planning/retrospective scheduled to Sundays 20.00
 ####Retrospecive
  * All initial workitems are completed in the trello board
  * Test with exporting/importing from test client in Chrome has been done and is verified to work
+ * A problem with debugging the service was resolved and the URI used to call the service were changed to a working one
 
 ####Planning
  * UnitTests should be written for the service methods that lacks those
