@@ -8,62 +8,33 @@ namespace Client
 {
     internal class Client
     {
-        public static object HttpUtility { get; private set; }
-
-        private static string URL = "http://localhost/todo";
+        private const string Url = "http://localhost/todo";
 
         private static void Main(string[] args)
         {
-            var host = new WebServiceHost(typeof(ToDoService), new Uri(URL));
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
+
+            var host = new WebServiceHost(typeof(ToDoService), new Uri(Url));
 
             try
             {
-
-                var binding = new WebHttpBinding {TransferMode = TransferMode.Streamed};
+                var binding = new WebHttpBinding { TransferMode = TransferMode.Streamed };
                 var ep = host.AddServiceEndpoint(typeof(IToDoService), binding, "");
                 ep.Behaviors.Add(new WebHttpBehavior { HelpEnabled = true });
 
                 host.Open();
 
-                using (var cf = new ChannelFactory<IToDoService>(new WebHttpBinding(), URL))
+                using (var cf = new ChannelFactory<IToDoService>(new WebHttpBinding(), Url))
                 {
                     cf.Endpoint.Behaviors.Add(new WebHttpBehavior());
 
                     var channel = cf.CreateChannel();
 
-                    Console.WriteLine("Webservice started on: " + URL);
-                    Console.WriteLine("Go to " + URL + "/help for information about funktionality");
+                    Console.WriteLine("Webservice started on: " + Url);
+                    Console.WriteLine("Go to " + Url + "/help for information about functionality");
 
-                    //GetToDoList(channel);
-
-                    //AddToDoList(channel);
-
-                    //DeleteToDoItem(channel);
-
-                    //FinishToDoItem(channel);
-
-                    //UnFinishToDoItem(channel);
-
-                    //GetNumberOfToDoItemsInList(channel);
-
-                    //AddToDoEntry(channel);
-
-                    //GetToDoListByDone(channel);
-
-                    //UpdateToDoItem(channel);
-
-                    //GetToDoListByVip(channel);
-
-                    //SetDeadLineToDoItem(channel);
-
-                    //GetToDoListOrderedAscendingByDeadLine(channel);
-
-                    //GetTotalEstimation(channel);
-
-                    //UpdateToDoItemWithEstimate(channel);
-
-                    //AddToDoEntries(channel);
-
+                    MakeAllPossibleCalls(channel);
                 }
 
                 Console.WriteLine("Press <ENTER> to terminate");
@@ -71,15 +42,51 @@ namespace Client
 
                 host.Close();
             }
-
             catch (CommunicationException cex)
             {
                 Console.WriteLine("An exception occurred: {0}", cex.Message);
                 host.Abort();
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An exception occurred: {0}", ex.Message);
+                host.Abort();
+            }
         }
 
-       
+        private static void MakeAllPossibleCalls(IToDoService channel)
+        {
+            GetToDoList(channel);
+
+            AddToDoList(channel);
+
+            DeleteToDoItem(channel);
+
+            FinishToDoItem(channel);
+
+            UnFinishToDoItem(channel);
+
+            GetNumberOfToDoItemsInList(channel);
+
+            AddToDoEntry(channel);
+
+            GetToDoListByDone(channel);
+
+            UpdateToDoItem(channel);
+
+            GetToDoListByVip(channel);
+
+            SetDeadLineToDoItem(channel);
+
+            GetToDoListOrderedAscendingByDeadLine(channel);
+
+            GetTotalEstimation(channel);
+
+            UpdateToDoItemWithEstimate(channel);
+
+            AddToDoEntries(channel);
+        }
+
 
         private static void DeleteToDoItem(IToDoService channel)
         {
@@ -209,7 +216,7 @@ namespace Client
                 Console.WriteLine("Error: " + error);
         }
             */
-            Console.WriteLine("Updated ID # {0} with {1}",id,  temp);
+            Console.WriteLine("Updated ID # {0} with {1}", id, temp);
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by posting a JSON Object to");
             Console.WriteLine("http://localhost:8000/UpdateToDoItem");
