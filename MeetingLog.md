@@ -55,12 +55,12 @@ Sprint planning/retrospective scheduled to Sundays 20.00
 
 #####v.53 – Sprint 3
   *	SCRUM master James Enggren
-  *	Sprint planning/retrospective 20/12 20.00
+  *	Sprint planning/retrospective 27/12 20.00
   *	Item 9-11
   *	Unit testing by developer and code reviewer
 
 #####v.1 – Final testing and documentation.
-  *	Retrospective/Test and deployment planning 27/12 20.00
+  *	Retrospective/Test and deployment planning 3/1 20.00
   *	Acceptance testing and final bug fixes
   *	Delivery at 6/1 23:59
 
