@@ -22,6 +22,19 @@ Sprint planning/retrospective scheduled to Sundays 20.00
  * Two items each were assigned of the remaining user stories and they should be completed before/on 27th December
  * It was decided that the last sprint following this one will be dedicated to refactoring and testing leaving the final days before delivery for finalizing the complete delivery
 
+##Retro/Planning meeting conducted 27/12 20:00
+
+####Retrospecive
+ * All initial workitems are completed in the trello board
+ * Test with exporting/importing from test client in Chrome has been done and is verified to work
+ * A problem with debugging the service was resolved and the URI used to call the service were changed to a working one
+
+####Planning
+ * UnitTests should be written for the service methods that lacks those
+ * We decided to use a unified validation method for the ToDo item that can be called from the methods that takes a ToDo item as input
+ * Serverpart of the current client app should be moved out of the client and put in an own Server console application
+ * The clientpart of the current client app should remain but be run as an optional part of the solution if needed
+ * Help page for the web based part of the service should be updated with descriptions and other information needed for developers implimenting the service
 
 ###Project time plan:
 
@@ -42,12 +55,12 @@ Sprint planning/retrospective scheduled to Sundays 20.00
 
 #####v.53 – Sprint 3
   *	SCRUM master James Enggren
-  *	Sprint planning/retrospective 20/12 20.00
+  *	Sprint planning/retrospective 27/12 20.00
   *	Item 9-11
   *	Unit testing by developer and code reviewer
 
 #####v.1 – Final testing and documentation.
-  *	Retrospective/Test and deployment planning 27/12 20.00
+  *	Retrospective/Test and deployment planning 3/1 20.00
   *	Acceptance testing and final bug fixes
   *	Delivery at 6/1 23:59
 
