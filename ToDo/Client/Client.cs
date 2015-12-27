@@ -10,54 +10,59 @@ namespace Client
     {
         public static object HttpUtility { get; private set; }
 
+        private static string URL = "http://localhost/todo";
+
         private static void Main(string[] args)
         {
-            var host = new WebServiceHost(typeof(ToDoService), new Uri("http://localhost:8000/"));
+            var host = new WebServiceHost(typeof(ToDoService), new Uri(URL));
 
             try
             {
 
-                var binding = new WebHttpBinding() {TransferMode = TransferMode.Streamed};
-
+                var binding = new WebHttpBinding {TransferMode = TransferMode.Streamed};
                 var ep = host.AddServiceEndpoint(typeof(IToDoService), binding, "");
+                ep.Behaviors.Add(new WebHttpBehavior { HelpEnabled = true });
 
                 host.Open();
 
-                using (var cf = new ChannelFactory<IToDoService>(new WebHttpBinding(),"http://localhost:8000"))
+                using (var cf = new ChannelFactory<IToDoService>(new WebHttpBinding(), URL))
                 {
                     cf.Endpoint.Behaviors.Add(new WebHttpBehavior());
 
                     var channel = cf.CreateChannel();
-                    
-                    GetToDoList(channel);
 
-                    AddToDoList(channel);
+                    Console.WriteLine("Webservice started on: " + URL);
+                    Console.WriteLine("Go to " + URL + "/help for information about funktionality");
 
-                    DeleteToDoItem(channel);
+                    //GetToDoList(channel);
 
-                    FinishToDoItem(channel);
+                    //AddToDoList(channel);
 
-                    UnFinishToDoItem(channel);
+                    //DeleteToDoItem(channel);
 
-                    GetNumberOfToDoItemsInList(channel);
+                    //FinishToDoItem(channel);
 
-                    AddToDoEntry(channel);
+                    //UnFinishToDoItem(channel);
 
-                    GetToDoListByDone(channel);
+                    //GetNumberOfToDoItemsInList(channel);
 
-                    UpdateToDoItem(channel);
+                    //AddToDoEntry(channel);
 
-                    GetToDoListByVip(channel);
+                    //GetToDoListByDone(channel);
 
-                    SetDeadLineToDoItem(channel);
+                    //UpdateToDoItem(channel);
 
-                    GetToDoListOrderedAscendingByDeadLine(channel);
+                    //GetToDoListByVip(channel);
 
-                    GetTotalEstimation(channel);
+                    //SetDeadLineToDoItem(channel);
 
-                    UpdateToDoItemWithEstimate(channel);
+                    //GetToDoListOrderedAscendingByDeadLine(channel);
 
-                    AddToDoEntries(channel);
+                    //GetTotalEstimation(channel);
+
+                    //UpdateToDoItemWithEstimate(channel);
+
+                    //AddToDoEntries(channel);
 
                 }
 
