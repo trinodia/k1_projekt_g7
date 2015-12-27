@@ -17,7 +17,7 @@ namespace Client
             try
             {
 
-                var binding = new WebHttpBinding {TransferMode = TransferMode.Streamed};
+                var binding = new WebHttpBinding() {TransferMode = TransferMode.Streamed};
 
                 var ep = host.AddServiceEndpoint(typeof(IToDoService), binding, "");
 

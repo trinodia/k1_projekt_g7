@@ -310,7 +310,7 @@ namespace BusinessLogic
         }
 
 
-        public static List<ToDo> GetToDoListOrderedAscendingByDeadline(string name)
+        public static List<ToDo> GetToDoListOrderedAscendingByDeadLine(string name)
         {
             var dbSession = new DataAccessLayer();
 
