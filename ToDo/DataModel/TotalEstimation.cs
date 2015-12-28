@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace DataModel
 {
-    public class TotalEstimation : Base, IError
+    [DataContract(Name = "TotalEstimation", Namespace = "Service")]
+    public class TotalEstimation : DefaultReturnMessage
     {
+        [DataMember(Name = "TotalMinutes")]
         public int TotalMinutes { get; set; }
+
+        [DataMember(Name = "TimeCompleted")]
         public DateTime TimeCompleted { get; set; }
-        public string ErrorMessage { get; set; }
-        public string ErrorType { get; set; }
+
     }
 }

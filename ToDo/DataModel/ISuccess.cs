@@ -2,7 +2,7 @@
 
 namespace DataModel
 {
-    public interface IBase
+    public interface ISuccess
     {
         bool Success { get; set; }
     }

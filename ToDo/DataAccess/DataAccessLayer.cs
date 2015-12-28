@@ -17,7 +17,6 @@ namespace DataAccess
         const string ConnectionString =
             @"Data Source=localhost;Initial Catalog = DB_ToDoList; Persist Security Info=True;User ID = RestFullUser; Password=RestFull123";
 
-        private string ErrorMessage { get; set; }
         private SqlConnection conn;
         private static string connString;
         private SqlCommand command;
@@ -34,38 +33,30 @@ namespace DataAccess
         /// <param name="toDo"></param>
         public void AddToDo(ToDo toDo)
         {
-            try
+            using (conn)
             {
-                using (conn)
-                {
-                    //using parametirized query
-                    string sqlInserString =
-                    "INSERT INTO ToDoList (Description, Name, CreatedDate, DeadLine, EstimationTime, Finnished) VALUES ( @description, @name, @CreatedDate, @deadLine, @estimationTime, @finnished)";
+                //using parametirized query
+                string sqlInserString =
+                "INSERT INTO ToDoList (Description, Name, CreatedDate, DeadLine, EstimationTime, Finnished) VALUES ( @description, @name, @CreatedDate, @deadLine, @estimationTime, @finnished)";
 
-                    conn = new SqlConnection(connString);
+                conn = new SqlConnection(connString);
 
-                    command = new SqlCommand();
-                    command.Connection = conn;
-                    command.Connection.Open();
-                    command.CommandText = sqlInserString;
+                command = new SqlCommand();
+                command.Connection = conn;
+                command.Connection.Open();
+                command.CommandText = sqlInserString;
 
-                    SqlParameter descriptionParam = new SqlParameter("@description", toDo.Description);
-                    SqlParameter userParam = new SqlParameter("@name", toDo.Name);
-                    SqlParameter createdParam = new SqlParameter("@createdDate", toDo.CreatedDate);
-                    SqlParameter deadLineParam = new SqlParameter("@deadLine", toDo.DeadLine);
-                    SqlParameter estimateParam = new SqlParameter("@estimationTime", toDo.EstimationTime);
-                    SqlParameter flagParam = new SqlParameter("@finnished", toDo.Finnished ? 1 : 0);
+                SqlParameter descriptionParam = new SqlParameter("@description", toDo.Description);
+                SqlParameter userParam = new SqlParameter("@name", toDo.Name);
+                SqlParameter createdParam = new SqlParameter("@createdDate", toDo.CreatedDate);
+                SqlParameter deadLineParam = new SqlParameter("@deadLine", toDo.DeadLine);
+                SqlParameter estimateParam = new SqlParameter("@estimationTime", toDo.EstimationTime);
+                SqlParameter flagParam = new SqlParameter("@finnished", toDo.Finnished ? 1 : 0);
 
+                command.Parameters.AddRange(new SqlParameter[] { descriptionParam, userParam, createdParam, deadLineParam, estimateParam, flagParam });
+                command.ExecuteNonQuery();
+                command.Connection.Close();
 
-                    command.Parameters.AddRange(new SqlParameter[] { descriptionParam, userParam, createdParam, deadLineParam, estimateParam, flagParam });
-                    command.ExecuteNonQuery();
-                    command.Connection.Close();
-
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.Message;
             }
         }
 
@@ -75,35 +66,28 @@ namespace DataAccess
         /// <param name="toDo"></param>
         public void UpdateToDo(ToDo toDo)
         {
-            try
+            using (conn)
             {
-                using (conn)
-                {
-                    string sqlUpdateString =
-                    "UPDATE ToDoList SET Description=@description, Name=@name, CreatedDate=@createdDate, DeadLine=@deadLine, EstimationTime=@estimationTime, Finnished=@finnished WHERE ID=" + toDo.Id;
+                string sqlUpdateString =
+                "UPDATE ToDoList SET Description=@description, Name=@name, CreatedDate=@createdDate, DeadLine=@deadLine, EstimationTime=@estimationTime, Finnished=@finnished WHERE ID=" + toDo.Id;
 
-                    conn = new SqlConnection(connString);
+                conn = new SqlConnection(connString);
 
-                    command = new SqlCommand();
-                    command.Connection = conn;
-                    command.Connection.Open();
-                    command.CommandText = sqlUpdateString;
+                command = new SqlCommand();
+                command.Connection = conn;
+                command.Connection.Open();
+                command.CommandText = sqlUpdateString;
 
-                    SqlParameter descriptionParam = new SqlParameter("@Description", toDo.Description);
-                    SqlParameter userParam = new SqlParameter("@Name", toDo.Name);
-                    SqlParameter createdParam = new SqlParameter("@createdDate", toDo.CreatedDate);
-                    SqlParameter deadLineParam = new SqlParameter("@deadLine", toDo.DeadLine);
-                    SqlParameter estimateParam = new SqlParameter("@EstimationTime", toDo.EstimationTime);
-                    SqlParameter flagParam = new SqlParameter("@finnished", toDo.Finnished ? 1 : 0);
+                SqlParameter descriptionParam = new SqlParameter("@Description", toDo.Description);
+                SqlParameter userParam = new SqlParameter("@Name", toDo.Name);
+                SqlParameter createdParam = new SqlParameter("@createdDate", toDo.CreatedDate);
+                SqlParameter deadLineParam = new SqlParameter("@deadLine", toDo.DeadLine);
+                SqlParameter estimateParam = new SqlParameter("@EstimationTime", toDo.EstimationTime);
+                SqlParameter flagParam = new SqlParameter("@finnished", toDo.Finnished ? 1 : 0);
 
-                    command.Parameters.AddRange(new SqlParameter[] { descriptionParam, userParam, createdParam, deadLineParam, estimateParam, flagParam });
-                    command.ExecuteNonQuery();
-                    command.Connection.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.Message;
+                command.Parameters.AddRange(new SqlParameter[] { descriptionParam, userParam, createdParam, deadLineParam, estimateParam, flagParam });
+                command.ExecuteNonQuery();
+                command.Connection.Close();
             }
         }
 
@@ -113,28 +97,21 @@ namespace DataAccess
         /// <param name="ID"></param>
         public void DeleteToDo(int ID)
         {
-            try
+            using (conn)
             {
-                using (conn)
-                {
-                    string sqlDeleteString = "DELETE FROM ToDoLIst WHERE ID=@ID ";
+                string sqlDeleteString = "DELETE FROM ToDoLIst WHERE ID=@ID ";
 
-                    conn = new SqlConnection(connString);
+                conn = new SqlConnection(connString);
 
-                    command = new SqlCommand();
-                    command.Connection = conn;
-                    command.Connection.Open();
-                    command.CommandText = sqlDeleteString;
+                command = new SqlCommand();
+                command.Connection = conn;
+                command.Connection.Open();
+                command.CommandText = sqlDeleteString;
 
-                    SqlParameter IdParam = new SqlParameter("@ID", ID);
-                    command.Parameters.Add(IdParam);
-                    command.ExecuteNonQuery();
-                    command.Connection.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.Message;
+                SqlParameter IdParam = new SqlParameter("@ID", ID);
+                command.Parameters.Add(IdParam);
+                command.ExecuteNonQuery();
+                command.Connection.Close();
             }
         }
 
@@ -144,43 +121,32 @@ namespace DataAccess
         /// <returns></returns>
         public List<ToDo> GetToDoList()
         {
-            try
+            using (conn)
             {
-                using (conn)
+                toDoList = new List<ToDo>();
+
+                conn = new SqlConnection(connString);
+
+                string sqlSelectString = "SELECT * FROM ToDoList";
+                command = new SqlCommand(sqlSelectString, conn);
+                command.Connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    toDoList = new List<ToDo>();
-
-                    conn = new SqlConnection(connString);
-
-                    string sqlSelectString = "SELECT * FROM ToDoList";
-                    command = new SqlCommand(sqlSelectString, conn);
-                    command.Connection.Open();
-
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        ToDo toDo = new ToDo();
-                        toDo.Id = reader.GetInt32(reader.GetOrdinal("ID"));
-                        toDo.Description = reader.GetString(reader.GetOrdinal("Description"));
-                        toDo.Name = reader.GetString(reader.GetOrdinal("Name"));
-                        toDo.DeadLine = reader.GetDateTime(reader.GetOrdinal("DeadLine"));
-                        toDo.CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"));
-                        toDo.EstimationTime = reader.GetInt32(reader.GetOrdinal("EstimationTime"));
-                        toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
-                        toDoList.Add(toDo);
-                    }
-                    command.Connection.Close();
-                    return toDoList;
+                    ToDo toDo = new ToDo();
+                    toDo.Id = reader.GetInt32(reader.GetOrdinal("ID"));
+                    toDo.Description = reader.GetString(reader.GetOrdinal("Description"));
+                    toDo.Name = reader.GetString(reader.GetOrdinal("Name"));
+                    toDo.DeadLine = reader.GetDateTime(reader.GetOrdinal("DeadLine"));
+                    toDo.CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"));
+                    toDo.EstimationTime = reader.GetInt32(reader.GetOrdinal("EstimationTime"));
+                    toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
+                    toDoList.Add(toDo);
                 }
-
+                command.Connection.Close();
+                return toDoList;
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.Message;
-            }
-            return null;
-
-
         }
 
         /// <summary>
@@ -190,40 +156,40 @@ namespace DataAccess
         /// <returns></returns>
         public ToDo GetToDoById(int id)
         {
-            try
+
+            if (id == 0)
+                throw new ArgumentException("ID can't be 0.");
+
+            if (id < 0)
+                throw new ArgumentException("ID can't be negative.");
+
+            using (conn)
             {
-                using (conn)
-                {
 
-                    conn = new SqlConnection(connString);
+                conn = new SqlConnection(connString);
 
-                    string sqlSelectString = "SELECT * FROM ToDoLIst WHERE ID=" + id;
-                    command = new SqlCommand(sqlSelectString, conn);
-                    command.Connection.Open();
+                string sqlSelectString = "SELECT * FROM ToDoLIst WHERE ID=" + id;
+                command = new SqlCommand(sqlSelectString, conn);
+                command.Connection.Open();
 
-                    SqlDataReader reader = command.ExecuteReader();
-                    reader.Read();
-                    ToDo toDo = new ToDo();
-                    toDo.Id = reader.GetInt32(reader.GetOrdinal("ID"));
-                    toDo.Description = reader.GetString(reader.GetOrdinal("Description"));
-                    toDo.Name = reader.GetString(reader.GetOrdinal("Name"));
-                    toDo.DeadLine = reader.GetDateTime(reader.GetOrdinal("DeadLine"));
-                    toDo.CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"));
-                    toDo.EstimationTime = reader.GetInt32(reader.GetOrdinal("EstimationTime"));
-                    toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                ToDo toDo = new ToDo();
+                toDo.Id = reader.GetInt32(reader.GetOrdinal("ID"));
+                toDo.Description = reader.GetString(reader.GetOrdinal("Description"));
+                toDo.Name = reader.GetString(reader.GetOrdinal("Name"));
+                toDo.DeadLine = reader.GetDateTime(reader.GetOrdinal("DeadLine"));
+                toDo.CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"));
+                toDo.EstimationTime = reader.GetInt32(reader.GetOrdinal("EstimationTime"));
+                toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
 
-                    command.Connection.Close();
-                    return toDo;
-                }
+                command.Connection.Close();
 
+                if (toDo == null)
+                    throw new ArgumentException("The specified ID could not be found.");
+
+                return toDo;
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.Message;
-            }
-            return null;
-
-
         }
 
         /// <summary>
@@ -233,50 +199,40 @@ namespace DataAccess
         /// <returns></returns>
         public List<ToDo> GetToDoListByName(string name)
         {
-            try
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("Name may not be null, empty or whitespace.");
+
+            using (conn)
             {
-                using (conn)
+                toDoList = new List<ToDo>();
+
+                conn = new SqlConnection(connString);
+
+                string sqlSelectString = "select * from ToDoList where Name like '%" + name + "%'";
+                command = new SqlCommand(sqlSelectString, conn);
+                command.Connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    toDoList = new List<ToDo>();
-
-                    conn = new SqlConnection(connString);
-
-                    string sqlSelectString = "select * from ToDoList where Name like '%" + name + "%'";
-                    command = new SqlCommand(sqlSelectString, conn);
-                    command.Connection.Open();
-
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        ToDo toDo = new ToDo();
-                        toDo.Id = reader.GetInt32(reader.GetOrdinal("ID"));
-                        toDo.Description = reader.GetString(reader.GetOrdinal("Description"));
-                        toDo.Name = reader.GetString(reader.GetOrdinal("Name"));
-                        toDo.DeadLine = reader.GetDateTime(reader.GetOrdinal("DeadLine"));
-                        toDo.CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"));
-                        toDo.EstimationTime = reader.GetInt32(reader.GetOrdinal("EstimationTime"));
-                        toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
-                        toDoList.Add(toDo);
-                    }
-                    command.Connection.Close();
-                    return toDoList;
+                    ToDo toDo = new ToDo();
+                    toDo.Id = reader.GetInt32(reader.GetOrdinal("ID"));
+                    toDo.Description = reader.GetString(reader.GetOrdinal("Description"));
+                    toDo.Name = reader.GetString(reader.GetOrdinal("Name"));
+                    toDo.DeadLine = reader.GetDateTime(reader.GetOrdinal("DeadLine"));
+                    toDo.CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"));
+                    toDo.EstimationTime = reader.GetInt32(reader.GetOrdinal("EstimationTime"));
+                    toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
+                    toDoList.Add(toDo);
                 }
+                command.Connection.Close();
 
+                if (toDoList == null)
+                    throw new NullReferenceException("A list with the given name could not be retrieved.");
+
+                return toDoList;
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.Message;
-            }
-            return null;
-
-
         }
-
-        public String GetErrorMessage()
-        {
-            return ErrorMessage;
-        }
-
 
     }
 }

@@ -40,9 +40,9 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList("test", "test desc", null);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "test", Description = "test desc" });
                 var toDoList = BusinessLogicLayer.GetToDoListByName("test");
-                var id = toDoList.First().Id;
+                var id = toDoList.Items.First().Id;
                 id += 1;
                 BusinessLogicLayer.DeleteToDoItemById(id);
             }
@@ -65,7 +65,7 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("test", "test description", DateTime.Now);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "test", Description = "test description", DeadLine = DateTime.Now });
             }
         }
 
@@ -75,68 +75,70 @@ namespace UnitTests
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels list", "Daniels list description", DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
+
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_NameIsNull_ThrowsArgumentNullException()
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList(null, "Daniels list description", DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = null, Description = "Daniels list description" });
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_NameIsEmpty_ThrowsArgumentNullException()
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("", "Daniels list description", DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "", Description = "Daniels list description" });
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_NameIsWhitespace_ThrowsArgumentNullException()
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList(" ", "Daniels list description", DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = " ", Description = "Daniels list description" });
             }
         }
 
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_DescriptionIsNull_ThrowsArgumentNullException()
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels list", null, DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = null });
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_DescriptionIsEmpty_ThrowsArgumentNullException()
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels list", "", DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "" });
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_DescriptionIsWhitespace_ThrowsArgumentNullException()
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels list", " ", DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = " " });
             }
         }
 
@@ -145,7 +147,7 @@ namespace UnitTests
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels unique list", "Daniels list description", null, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = null, EstimationTime = 10 });
                 Assert.IsTrue(true);
             }
         }
@@ -156,7 +158,7 @@ namespace UnitTests
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels unique list", "Daniels list description", DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
                 // this test will not be reached if we do not succeed with creating the list
                 Assert.IsTrue(true);
             }
@@ -171,16 +173,17 @@ namespace UnitTests
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels unique list", "Daniels list description", DateTime.Now, 10);
-                BusinessLogic.BusinessLogicLayer.AddToDoEntry("Daniels unique list", "Daniels list description 2", DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
+
+                BusinessLogicLayer.AddToDoEntry(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description 2", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 var items = BusinessLogicLayer.GetToDoListByName("Daniels unique list");
 
                 var numNotDoneItems = BusinessLogic.BusinessLogicLayer.GetNumberOfToDoItemsInList("Daniels unique list", false);
-                Assert.IsTrue(numNotDoneItems == 2);
+                Assert.IsTrue(numNotDoneItems.Count == 2);
 
                 var numDoneItems = BusinessLogic.BusinessLogicLayer.GetNumberOfToDoItemsInList("Daniels unique list", true);
-                Assert.IsTrue(numDoneItems == 0);
+                Assert.IsTrue(numDoneItems.Count == 0);
             }
         }
 
@@ -203,8 +206,9 @@ namespace UnitTests
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.AddToDoList("Daniels unique list", "Daniels list description", DateTime.Now, 10);
-                BusinessLogic.BusinessLogicLayer.AddToDoEntry("Daniels unique list", "Daniels list description 2", DateTime.Now, 10);
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
+
+                BusinessLogicLayer.AddToDoEntry(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description 2", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 var totalEstimation = BusinessLogicLayer.GetTotalEstimation("Daniels unique list", true);
 

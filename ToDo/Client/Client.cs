@@ -3,6 +3,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Description;
 using Service;
+using DataModel;
 
 namespace Client
 {
@@ -113,12 +114,13 @@ namespace Client
         {
             Console.WriteLine("Calling AddToDo via HTTP POST: ");
 
-            var error = channel.AddToDoList("Daniels list", "Daniels list description", DateTime.Now, 10);
+            var output = channel.AddToDoList(new ToDo() { Name = "Daniels list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrEmpty(output.ErrorMessage))
             {
                 Console.WriteLine("");
-                Console.WriteLine("Error: " + error);
+                Console.WriteLine("Error: " + output.ErrorMessage);
+                Console.WriteLine("ErrorType: " + output.ErrorType);
             }
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by posting a JSON Object to");
@@ -132,7 +134,7 @@ namespace Client
         {
             Console.WriteLine("Calling GetToDoListByName via HTTP GET: ");
             var toDoList = channel.GetToDoListByName("Hamid");
-            foreach (var toDo in toDoList)
+            foreach (var toDo in toDoList.Items)
             {
                 Console.WriteLine("   Output: {0}", toDo.Description);
             }
@@ -166,12 +168,13 @@ namespace Client
             Console.WriteLine("Calling AddToDoEntry via HTTP POST: ");
 
             //string AddToDoEntry(string name, string description, DateTime deadline, int estimationtime)
-            var error = channel.AddToDoEntry("Daniels list", "Daniels todo Thingie", DateTime.Now, 10);
+            var output = channel.AddToDoItem(new ToDo() { Name = "Daniels list", Description = "Daniels todo Thingie", DeadLine = DateTime.Now, EstimationTime = 10 });
 
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrEmpty(output.ErrorMessage))
             {
                 Console.WriteLine("");
-                Console.WriteLine("Error: " + error);
+                Console.WriteLine("Error: " + output.ErrorMessage);
+                Console.WriteLine("ErrorType: " + output.ErrorType);
             }
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by posting a JSON Object to");
@@ -186,7 +189,7 @@ namespace Client
             //List<ToDo> GetToDoListByDone(string name)
             Console.WriteLine("Calling GetToDoListByDone via HTTP GET: ");
             var toDoList = channel.GetToDoListByDone("Hamid");
-            foreach (var toDo in toDoList)
+            foreach (var toDo in toDoList.Items)
             {
                 Console.WriteLine("   Output: {0}, {1}", toDo.Description, toDo.Finnished);
             }
@@ -204,9 +207,9 @@ namespace Client
             int id = 3;
             Console.WriteLine("Calling UpdateToDoItem via HTTP POST: ");
             var toDoList = channel.GetToDoListByName("");
-            var todoitem = toDoList[id];
+            var todoitem = toDoList.Items[id];
             todoitem.DeadLine = DateTime.UtcNow;
-            string temp = todoitem.DeadLine.ToString("hh:mm:ss");
+            string temp = ((DateTime)todoitem.DeadLine).ToString("hh:mm:ss");
             todoitem.Description = "Updated @ " + temp;
             channel.UpdateToDoItem(todoitem);
             /*
@@ -229,7 +232,7 @@ namespace Client
         {
             Console.WriteLine("Calling GetToDoListByVip via HTTP GET: ");
             var toDoList = channel.GetToDoListByVip("Hamid");
-            foreach (var toDo in toDoList)
+            foreach (var toDo in toDoList.Items)
             {
                 Console.WriteLine("   Output: {0}", toDo.Description);
             }
@@ -260,12 +263,13 @@ namespace Client
         private static void UpdateToDoItemWithEstimate(IToDoService channel)
         {
             Console.WriteLine("Calling UpdateToDoItemWithEstimate via HTTP GET: ");
-            var error = channel.UpdateToDoItemWithEstimate(1, 10);
+            var output = channel.UpdateToDoItemWithEstimate(1, 10);
 
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrEmpty(output.ErrorMessage))
             {
                 Console.WriteLine("");
-                Console.WriteLine("Error: " + error);
+                Console.WriteLine("Error: " + output.ErrorMessage);
+                Console.WriteLine("ErrorType: " + output.ErrorType);
             }
 
             Console.WriteLine("");
@@ -278,12 +282,13 @@ namespace Client
         {
             Console.WriteLine("Calling AddToDoEntries via HTTP POST: ");
 
-            var error = channel.AddToDoEntries("Daniels list", "Item 1 todo, Item 2 todo, Item 3 todo", DateTime.Now, 10);
+            var output = channel.AddToDoItems(new AddMultipleToDo() { Name = "Daniels list", Descriptions = "Item 1 todo, Item 2 todo, Item 3 todo", DeadLine = DateTime.Now, EstimationTime = 10 });
 
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrEmpty(output.ErrorMessage))
             {
                 Console.WriteLine("");
-                Console.WriteLine("Error: " + error);
+                Console.WriteLine("Error: " + output.ErrorMessage);
+                Console.WriteLine("ErrorType: " + output.ErrorType);
             }
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by posting a JSON Object to");
@@ -308,7 +313,7 @@ namespace Client
 
             var toDoListOrderedAscendingByDeadline = channel.GetToDoListOrderedAscendingByDeadLine(listName);
 
-            foreach (var toDoItem in toDoListOrderedAscendingByDeadline)
+            foreach (var toDoItem in toDoListOrderedAscendingByDeadline.Items)
             {
                 Console.WriteLine("ID: {0} \t Description: {1} \t Deadline: {2} \t ", toDoItem.Id, toDoItem.Description, toDoItem.DeadLine);
             }

@@ -10,42 +10,28 @@ namespace BusinessLogic
     {
         public static ToDo GetToDoItemById(int id)
         {
-            //TODO: Add exception handling;
-
             var dbSession = new DataAccessLayer();
 
             var toDoItem = dbSession.GetToDoById(id);
 
-            return toDoItem; //Rewrite when method only returns a ToDoItem instead of ToDoList;
+            return toDoItem;
         }
 
-        public static List<ToDo> GetToDoListByName(string name)
+        public static ToDoList GetToDoListByName(string name)
         {
             var dbSession = new DataAccessLayer();
 
             var toDoList = dbSession.GetToDoListByName(name);
 
-            if (toDoList == null)
-                throw new NullReferenceException("A list with the given name could not be retrieved.");
-
-            if (!toDoList.Any())
-                throw new ArgumentException("A list with the given name could not be found.");
-
-            return toDoList;
+            return new ToDoList() { Success = true, Count = toDoList.Count, Name = toDoList.First().Name, Items = toDoList };
         }
 
         public static void DeleteToDoItemById(int id)
         {
             var dbSession = new DataAccessLayer();
 
-            if (id == 0)
-                throw new ArgumentException("ID can't be 0.");
-
-            if (id < 0)
-                throw new ArgumentException("ID can't be negative.");
-
-            if (dbSession.GetToDoById(id) == null)
-                throw new ArgumentException("The specified ID could not be found.");
+            // GetToDoById includes check if item exists. Throws exception if it does not exist.
+            dbSession.GetToDoById(id);
 
             dbSession.DeleteToDo(id);
         }
@@ -54,20 +40,12 @@ namespace BusinessLogic
         {
             var dbSession = new DataAccessLayer();
 
-            if (id == 0)
-                throw new ArgumentException("ID can't be 0.");
-
-            if (id < 0)
-                throw new ArgumentException("ID can't be negative.");
-
-            if (dbSession.GetToDoById(id) == null)
-                throw new ArgumentException("The specified ID could not be found.");
-
+            // GetToDoById includes check if item exists. Throws exception if it does not exist.
             var toDoItemToFinnish = dbSession.GetToDoById(id);
 
             if (!toDoItemToFinnish.Finnished)
                 toDoItemToFinnish.Finnished = true;
-            
+
             dbSession.UpdateToDo(toDoItemToFinnish);
         }
 
@@ -75,15 +53,7 @@ namespace BusinessLogic
         {
             var dbSession = new DataAccessLayer();
 
-            if (id == 0)
-                throw new ArgumentException("ID can't be 0.");
-
-            if (id < 0)
-                throw new ArgumentException("ID can't be negative.");
-
-            if (dbSession.GetToDoById(id) == null)
-                throw new ArgumentException("The specified ID could not be found.");
-
+            // GetToDoById includes check if item exists. Throws exception if it does not exist.
             var toDoItemToFinnish = dbSession.GetToDoById(id);
 
             if (toDoItemToFinnish.Finnished)
@@ -96,15 +66,7 @@ namespace BusinessLogic
         {
             var dbSession = new DataAccessLayer();
 
-            if (id == 0)
-                throw new ArgumentException("ID can't be 0.");
-
-            if (id < 0)
-                throw new ArgumentException("ID can't be negative.");
-
-            if (dbSession.GetToDoById(id) == null)
-                throw new ArgumentException("The specified ID could not be found.");
-
+            // GetToDoById includes check if item exists. Throws exception if it does not exist.
             var toDoItemToUpdateDeadLineFor = dbSession.GetToDoById(id);
 
             toDoItemToUpdateDeadLineFor.DeadLine = newDeadLine;
@@ -112,178 +74,107 @@ namespace BusinessLogic
             dbSession.UpdateToDo(toDoItemToUpdateDeadLineFor);
         }
 
-        public static void AddToDoList(string name, string description, DateTime? deadline, int estimationtime = -1)
+        public static void AddToDoList(ToDo toDo)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("The lists name may not be null.");
-
-            if (string.IsNullOrWhiteSpace(description))
-                throw new ArgumentNullException("The lists description may not be null.");
-
-            if (name.Length < 6)
-                throw new ArgumentException("The name of the list most be at least 6 chars.");
-
-            var dbSession = new DataAccessLayer();
-
-            // If no deadline is provided, set a default deadline
-            deadline = deadline ?? new DateTime(1800, 1, 1, 0, 0, 0);
-
-            if (dbSession.GetToDoListByName(name).Count > 0)
-                throw new ArgumentException("A list with this name already exists and the name of a list most be unique.");
-
-            var newToDo = new ToDo()
+            if (toDo.Validate())
             {
-                Name = name,
-                Description = description,
-                Finnished = false,
-                CreatedDate = DateTime.Now,
-                DeadLine = (DateTime)deadline,
-                EstimationTime = estimationtime
-            };
 
-            dbSession.AddToDo(newToDo);
-        }
+                var dbSession = new DataAccessLayer();
 
-        public static void AddToDoEntry(string name,string description, DateTime deadline, int estimationtime)
-        {
-            if (name == null && description == null && deadline == null) //TODO: Should be logic OR and one error message per incorrect param?
-                throw new NullReferenceException("The Entry must be complete.");
+                if (dbSession.GetToDoListByName(toDo.Name).Count > 0)
+                    throw new ArgumentException("A list with this name already exists and the name of a list most be unique.");
 
-            if (estimationtime <= 0)
-                throw new ArgumentException("The Estimated time must be positive.");
-
-            var dbSession = new DataAccessLayer();
-
-            if (dbSession.GetToDoListByName(name).Count < 1 )
-                throw new ArgumentException("A list must be created first.");
-            //if (dbSession.GetToDoListByName(name).First   // Ersätta den första tomma ??
-
-            var newToDo = new ToDo()
-            {
-                Name = name,
-                Description = description,
-                Finnished = false,
-                CreatedDate = DateTime.Now,
-                DeadLine = deadline,
-                EstimationTime = estimationtime
-            };
-
-            dbSession.AddToDo(newToDo);
-        }
-
-        public static void AddToDoEntries(string name, string descriptions, DateTime? deadline, int estimationtime)
-        {
-            if(string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("You must supply a name for the list to add items to.");
-
-            if (string.IsNullOrWhiteSpace(descriptions))
-                throw new ArgumentException("You must supply a list of desctiptions to add to the list.");
-
-            var dbSession = new DataAccessLayer();
-
-            if (dbSession.GetToDoListByName(name).Count < 1)
-                throw new ArgumentException("A list must be created first.");
-
-            // If no deadline is provided, set a default deadline
-            deadline = deadline ?? new DateTime(1800, 1, 1, 0, 0, 0);
-
-            string[] descs = descriptions.Split(',');
-
-            foreach (var desc in descs)
-            {
-                var newToDo = new ToDo()
-                {
-                    Name = name,
-                    Description = desc.Trim(),
-                    Finnished = false,
-                    CreatedDate = DateTime.Now,
-                    DeadLine = (DateTime)deadline,
-                    EstimationTime = estimationtime
-                };
-
-                dbSession.AddToDo(newToDo);
+                dbSession.AddToDo(toDo);
             }
-
         }
 
-        public static List<ToDo> GetToDoListByDone(string name)
+        public static void AddToDoEntry(ToDo toDo)
+        {
+            if (toDo.Validate())
+            {
+                var dbSession = new DataAccessLayer();
+
+                if (!dbSession.GetToDoListByName(toDo.Name).Any())
+                    throw new ArgumentException("A list must be created first.");
+
+                dbSession.AddToDo(toDo);
+            }
+        }
+
+        public static void AddToDoEntries(AddMultipleToDo toDos)
+        {
+            if (toDos.Validate())
+            {
+                var dbSession = new DataAccessLayer();
+
+                if (!dbSession.GetToDoListByName(toDos.Name).Any())
+                    throw new ArgumentException("A list must be created first.");
+
+                string[] descs = toDos.Descriptions.Split(',');
+
+                foreach (var desc in descs)
+                {
+                    var newToDo = new ToDo()
+                    {
+                        Name = toDos.Name,
+                        Description = desc.Trim(),
+                        Finnished = false,
+                        CreatedDate = DateTime.Now,
+                        DeadLine = (DateTime)toDos.DeadLine,
+                        EstimationTime = toDos.EstimationTime
+                    };
+
+                    dbSession.AddToDo(newToDo);
+                }
+            }
+        }
+
+        public static ToDoList GetToDoListByDone(string name)
         {
             var dbSession = new DataAccessLayer();
 
             var toDoList = dbSession.GetToDoListByName(name);
 
-            if (toDoList == null)
-                throw new NullReferenceException("A list with the given name could not be retrieved.");
-
-            if (!toDoList.Any())
-                throw new ArgumentException("A list with the given name could not be found.");
-
-
-             
             toDoList.RemoveAll(x => x.Finnished == false);
 
-            return toDoList;
+            return new ToDoList() { Success = true, Count = toDoList.Count, Name = toDoList.First().Name, Items = toDoList };
         }
 
-        public static int GetNumberOfToDoItemsInList(string name, bool finnished)
+        public static NumToDoItems GetNumberOfToDoItemsInList(string name, bool finnished)
         {
             var dbSession = new DataAccessLayer();
-
-            if (name == null)
-                throw new ArgumentNullException("Name may not be null.");
 
             var toDoList = dbSession.GetToDoListByName(name);
 
-            if (toDoList == null)
-                throw new NullReferenceException("A list with the given name could not be retrieved.");
-
             // return how many items that was removed
-            return toDoList.RemoveAll(x => x.Finnished == finnished);
+            return new NumToDoItems() { Success = true, Count = toDoList.RemoveAll(x => x.Finnished == finnished) };
         }
 
-        public static void UpdateToDoItem(ToDo todoitem)
+        public static void UpdateToDoItem(ToDo toDo)
         {
-            //TODO: Add exception handling;
-
-            var dbSession = new DataAccessLayer();
-
-            dbSession.UpdateToDo(todoitem);
-            
-            //return Errorcode of shit if needed; 
+            if (toDo.Validate())
+            {
+                var dbSession = new DataAccessLayer();
+                dbSession.UpdateToDo(toDo);
+            }
         }
 
-        public static List<ToDo> GetToDoListByVip(string name)
+        public static ToDoList GetToDoListByVip(string name)
         {
             var dbSession = new DataAccessLayer();
 
-            var toDoList = dbSession.GetToDoListByName(name); // Just getting by Name, or does we want ALL Lists? 
+            var toDoList = dbSession.GetToDoListByName(name);
 
-            if (toDoList == null)
-                throw new NullReferenceException("A list with the given name could not be retrieved.");
-
-            if (!toDoList.Any())
-                throw new ArgumentException("A list with the given name could not be found.");
-
-            //toDoList.RemoveAll(x => x.Finnished == false);
-             
             toDoList.RemoveAll(x => x.Description.EndsWith("!") != true);
-            return toDoList;
+
+            return new ToDoList() { Success = true, Count = toDoList.Count, Name = toDoList.First().Name, Items = toDoList };
         }
 
         public static void UpdateToDoItemWithEstimate(int id, int estimationtime)
         {
             var dbSession = new DataAccessLayer();
 
-            if (id == 0)
-                throw new ArgumentException("ID can't be 0.");
-
-            if (id < 0)
-                throw new ArgumentException("ID can't be negative.");
-
             var toDoItem = dbSession.GetToDoById(id);
-
-            if (toDoItem == null)
-                throw new ArgumentException("The specified ID could not be found.");
 
             toDoItem.EstimationTime = estimationtime;
 
@@ -294,14 +185,9 @@ namespace BusinessLogic
         {
             var dbSession = new DataAccessLayer();
 
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("Name may not be null, empty or whitespace.");
-
             var toDoList = dbSession.GetToDoListByName(name);
 
-            if (toDoList == null)
-                throw new NullReferenceException("A list with the given name could not be retrieved.");
-            if(!includeFinnished)
+            if (!includeFinnished)
                 toDoList.RemoveAll(x => x.Finnished);
 
             var totalEstimation = toDoList.Select(x => x.EstimationTime).Sum();
@@ -310,21 +196,15 @@ namespace BusinessLogic
         }
 
 
-        public static List<ToDo> GetToDoListOrderedAscendingByDeadLine(string name)
+        public static ToDoList GetToDoListOrderedAscendingByDeadLine(string name)
         {
             var dbSession = new DataAccessLayer();
 
-            var toDoList = dbSession.GetToDoListByName(name); // Just getting by Name, or does we want ALL Lists? 
-
-            if (toDoList == null)
-                throw new NullReferenceException("A list with the given name could not be retrieved.");
-
-            if (!toDoList.Any())
-                throw new ArgumentException("A list with the given name could not be found.");
+            var toDoList = dbSession.GetToDoListByName(name);
 
             var toDoListOrderedAscendingByDeadLine = toDoList.OrderBy(o => o.DeadLine).ToList();
 
-            return toDoListOrderedAscendingByDeadLine;
+            return new ToDoList() { Name = toDoListOrderedAscendingByDeadLine.First().Name, Count = toDoListOrderedAscendingByDeadLine.Count, Items = toDoListOrderedAscendingByDeadLine, Success = true };
         }
     }
 

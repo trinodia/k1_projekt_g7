@@ -7,277 +7,168 @@ namespace Service
 {
     public class ToDoService : IToDoService
     {
-        public string AddToDoEntry(string name, string description, DateTime deadline, int estimationtime)
+        public DefaultReturnMessage AddToDoItem(ToDo toDo)
         {
             try
             {
-                BusinessLogicLayer.AddToDoEntry(name, description, deadline, estimationtime);
+                BusinessLogicLayer.AddToDoEntry(toDo);
+                return new DefaultReturnMessage() { Success = true };
             }
-            catch (NullReferenceException nullEx)
+            catch (Exception ex)
             {
-                return nullEx.Message;
+                return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
-            catch (ArgumentException argEx)
-            {
-                return argEx.Message;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return "Unknown exception.";
-            }
-            //TODO: Write "" to browser.
-            return "";
         }
 
-        public string DeleteToDoItem(int id)
+        public DefaultReturnMessage DeleteToDoItem(int id)
         {
             try
             {
                 BusinessLogicLayer.DeleteToDoItemById(id);
+                return new DefaultReturnMessage() { Success = true };
             }
-            catch (ArgumentException argEx)
+            catch (Exception ex)
             {
-                return argEx.Message;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return "Unhandled exception.";
+                return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
             //TODO: Write "" to browser.
-            return "";
         }
 
-        public string FinishToDoItem(int id)
+        public DefaultReturnMessage FinishToDoItem(int id)
         {
             try
             {
                 BusinessLogicLayer.FinishToDoItem(id);
+                return new DefaultReturnMessage() { Success = true };
             }
-            catch (NullReferenceException nullEx)
+            catch (Exception ex)
             {
-                return nullEx.Message;
+                return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
-            catch (ArgumentException argEx)
-            {
-                return argEx.Message;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return "Unknown exception.";
-            }
-            //TODO: Write "" to browser.
-            return "";
         }
 
-        public string UnFinishToDoItem(int id)
+        public DefaultReturnMessage UnFinishToDoItem(int id)
         {
             try
             {
                 BusinessLogicLayer.UnFinishToDoItem(id);
+                return new DefaultReturnMessage() { Success = true };
             }
-            catch (NullReferenceException nullEx)
+            catch (Exception ex)
             {
-                return nullEx.Message;
+                return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
-            catch (ArgumentException argEx)
-            {
-                return argEx.Message;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return "Unknown exception.";
-            }
-            //TODO: Write "" to browser.
-            return "";
         }
 
-        public string SetDeadLineToDoItem(int id, DateTime newDeadLine)
+        public DefaultReturnMessage SetDeadLineToDoItem(int id, DateTime newDeadLine)
         {
             try
             {
                 BusinessLogicLayer.SetDeadLineToDoItem(id, newDeadLine);
+                return new DefaultReturnMessage() { Success = true };
             }
-            catch (NullReferenceException nullEx)
+            catch (Exception ex)
             {
-                return nullEx.Message;
+                return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
-            catch (ArgumentException argEx)
-            {
-                return argEx.Message;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return "Unknown exception.";
-            }
-            //TODO: Write "" to browser.
-            return "";
         }
 
-        public void UpdateToDoItem(ToDo todoitem)
+        public DefaultReturnMessage UpdateToDoItem(ToDo toDo)
         {
             try
             {
-                BusinessLogicLayer.UpdateToDoItem(todoitem);
-                
+                BusinessLogicLayer.UpdateToDoItem(toDo);
+                return new DefaultReturnMessage() { Success = true };
             }
-            catch (ArgumentException argEx)
+            catch (Exception ex)
             {
-                //TODO: Write argEx.Message to browser;
-                //return toDoList;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                //return toDoList;
+                return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
         }
 
-        public string AddToDoEntries(string name, string descriptions, DateTime? deadline, int estimationtime)
+        public DefaultReturnMessage AddToDoItems(AddMultipleToDo toDos)
         {
             try
             {
-                BusinessLogicLayer.AddToDoEntries(name, descriptions, deadline, estimationtime);
+                BusinessLogicLayer.AddToDoEntries(toDos);
+                return new DefaultReturnMessage() { Success = true };
             }
-            catch (NullReferenceException nullEx)
+            catch (Exception ex)
             {
-                return nullEx.Message;
-            }
-            catch (ArgumentException argEx)
-            {
-                return argEx.Message;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return "Unhandled exception.";
-            }
-            //TODO: Write "" to browser.
-            return "";
-        }
-
-        public List<ToDo> GetToDoListByName(string name)
-        {
-            var toDoList = new List<ToDo>();
-            try
-            {
-                toDoList = BusinessLogicLayer.GetToDoListByName(name);
-                return toDoList;
-            }
-            catch (ArgumentException argEx)
-            {
-                //TODO: Write argEx.Message to browser;
-                return toDoList;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return toDoList;
+                return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
         }
 
-        public string AddToDoList(string name, string description, DateTime? deadline, int estimationtime)
+        public ToDoList GetToDoListByName(string name)
         {
             try
             {
-                BusinessLogicLayer.AddToDoList(name, description, deadline, estimationtime);
+                return BusinessLogicLayer.GetToDoListByName(name);
             }
-            catch (NullReferenceException nullEx)
+            catch (Exception ex)
             {
-                return nullEx.Message;
+                return new ToDoList() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
-            catch (ArgumentException argEx)
-            {
-                return argEx.Message;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return "Unhandled exception.";
-            }
-            //TODO: Write "" to browser.
-            return "";
         }
 
-        public List<ToDo> GetToDoListByDone(string name)
+        public DefaultReturnMessage AddToDoList(ToDo toDo)
         {
-            var toDoList = new List<ToDo>();
             try
             {
-                toDoList = BusinessLogicLayer.GetToDoListByDone(name);
-                return toDoList;
+                BusinessLogicLayer.AddToDoList(toDo);
+                return new DefaultReturnMessage() { Success = true };
             }
-            catch (ArgumentException argEx)
+            catch (Exception ex)
             {
-                //TODO: Write argEx.Message to browser;
-                return toDoList;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return toDoList;
+                return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
         }
 
-        public int GetNumberOfToDoItemsInList(string name, bool finnished)
+        public ToDoList GetToDoListByDone(string name)
+        {
+            try
+            {
+                return BusinessLogicLayer.GetToDoListByDone(name);
+            }
+            catch (Exception ex)
+            {
+                return new ToDoList() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
+            }
+        }
+
+        public NumToDoItems GetNumberOfToDoItemsInList(string name, bool finnished)
         {
             try
             {
                 return BusinessLogicLayer.GetNumberOfToDoItemsInList(name, finnished);
             }
-            catch (ArgumentException argEx)
+            catch (Exception ex)
             {
-                //TODO: Write argEx.Message to browser;
-                return -1;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return -1;
+                return new NumToDoItems() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString(), Count = 0 };
             }
         }
 
-        public List<ToDo> GetToDoListByVip(string name)
+        public ToDoList GetToDoListByVip(string name)
         {
-            var toDoList = new List<ToDo>();
             try
             {
-                toDoList = BusinessLogicLayer.GetToDoListByVip(name);
-                return toDoList;
+                return BusinessLogicLayer.GetToDoListByVip(name);
             }
-            catch (ArgumentException argEx)
+            catch (Exception ex)
             {
-                //TODO: Write argEx.Message to browser;
-                return toDoList;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return toDoList;
+                return new ToDoList() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
         }
 
-        public List<ToDo> GetToDoListOrderedAscendingByDeadLine(string name)
+        public ToDoList GetToDoListOrderedAscendingByDeadLine(string name)
         {
-            var toDoList = new List<ToDo>();
             try
             {
-                toDoList = BusinessLogicLayer.GetToDoListOrderedAscendingByDeadLine(name);
-                return toDoList;
+                return BusinessLogicLayer.GetToDoListOrderedAscendingByDeadLine(name);
             }
-            catch (ArgumentException argEx)
+            catch (Exception ex)
             {
-                //TODO: Write argEx.Message to browser;
-                return toDoList;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return toDoList;
+                return new ToDoList() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
         }
 
@@ -287,41 +178,23 @@ namespace Service
             {
                 return BusinessLogicLayer.GetTotalEstimation(name, includeFinnished);
             }
-            catch (NullReferenceException nullEx)
-            {
-                return new TotalEstimation() { Success = false, ErrorMessage = nullEx.Message, ErrorType = nullEx.GetType().ToString() };
-            }
-            catch (ArgumentException argEx)
-            {
-                return new TotalEstimation() { Success = false, ErrorMessage = argEx.Message, ErrorType = argEx.GetType().ToString() };
-            }
             catch (Exception ex)
             {
-                return new TotalEstimation() { Success = false, ErrorMessage = "Unknown exception", ErrorType = ex.GetType().ToString() };
+                return new TotalEstimation() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
         }
 
-        public string UpdateToDoItemWithEstimate(int id, int estimationtime)
+        public DefaultReturnMessage UpdateToDoItemWithEstimate(int id, int estimationtime)
         {
             try
             {
-               BusinessLogicLayer.UpdateToDoItemWithEstimate(id, estimationtime);
+                BusinessLogicLayer.UpdateToDoItemWithEstimate(id, estimationtime);
+                return new DefaultReturnMessage() { Success = true };
             }
-            catch (NullReferenceException nullEx)
+            catch (Exception ex)
             {
-                return nullEx.Message;
+                return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
-            catch (ArgumentException argEx)
-            {
-                return argEx.Message;
-            }
-            catch (Exception)
-            {
-                //TODO: Write "Unknown exception." to browser.
-                return "Unknown exception.";
-            }
-            //TODO: Write "" to browser.
-            return "";
         }
     }
 }
