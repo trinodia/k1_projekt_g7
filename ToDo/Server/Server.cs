@@ -21,7 +21,7 @@ namespace Server
             {
                 var binding = new WebHttpBinding { TransferMode = TransferMode.Streamed };
                 var ep = host.AddServiceEndpoint(typeof(IToDoService), binding, "");
-                ep.Behaviors.Add(new WebHttpBehavior { HelpEnabled = true });
+                ep.Behaviors.Add(new WebHttpBehavior { HelpEnabled = true, DefaultOutgoingRequestFormat = WebMessageFormat.Json, DefaultOutgoingResponseFormat = WebMessageFormat.Json });
 
                 host.Open();
 
@@ -42,11 +42,13 @@ namespace Server
             {
                 Console.WriteLine("An exception occurred: {0}", cex.Message);
                 host.Abort();
+                Console.ReadLine();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("An exception occurred: {0}", ex.Message);
                 host.Abort();
+                Console.ReadLine();
             }
         }
     }

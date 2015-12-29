@@ -3,6 +3,7 @@ using DataModel;
 using DataAccess;
 using System;
 using System.Linq;
+using DataModel.RequestObjects;
 
 namespace BusinessLogic
 {
@@ -88,7 +89,7 @@ namespace BusinessLogic
             }
         }
 
-        public static void AddToDoEntry(ToDo toDo)
+        public static void AddToDoItem(ToDo toDo)
         {
             if (toDo.Validate())
             {

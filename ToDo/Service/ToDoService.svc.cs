@@ -2,6 +2,7 @@
 using DataModel;
 using BusinessLogic;
 using System;
+using DataModel.RequestObjects;
 
 namespace Service
 {
@@ -11,7 +12,7 @@ namespace Service
         {
             try
             {
-                BusinessLogicLayer.AddToDoEntry(toDo);
+                BusinessLogicLayer.AddToDoItem(toDo);
                 return new DefaultReturnMessage() { Success = true };
             }
             catch (Exception ex)
@@ -60,11 +61,11 @@ namespace Service
             }
         }
 
-        public DefaultReturnMessage SetDeadLineToDoItem(int id, DateTime newDeadLine)
+        public DefaultReturnMessage SetDeadLineToDoItem(SetDeadLineToDoItem newDeadLine)
         {
             try
             {
-                BusinessLogicLayer.SetDeadLineToDoItem(id, newDeadLine);
+                BusinessLogicLayer.SetDeadLineToDoItem(newDeadLine.id, newDeadLine.newDeadLine);
                 return new DefaultReturnMessage() { Success = true };
             }
             catch (Exception ex)
@@ -136,11 +137,14 @@ namespace Service
             }
         }
 
-        public NumToDoItems GetNumberOfToDoItemsInList(string name, bool finnished)
+        public NumToDoItems GetNumberOfToDoItemsInList(string name, string finnished)
         {
             try
             {
-                return BusinessLogicLayer.GetNumberOfToDoItemsInList(name, finnished);
+                bool _finnished = false;
+                bool.TryParse(finnished, out _finnished);
+
+                return BusinessLogicLayer.GetNumberOfToDoItemsInList(name, _finnished);
             }
             catch (Exception ex)
             {
@@ -172,11 +176,14 @@ namespace Service
             }
         }
 
-        public TotalEstimation GetTotalEstimation(string name, bool includeFinnished = false)
+        public TotalEstimation GetTotalEstimation(string name, string includeFinnished)
         {
             try
             {
-                return BusinessLogicLayer.GetTotalEstimation(name, includeFinnished);
+                bool _includeFinnished = false;
+                bool.TryParse(includeFinnished, out _includeFinnished);
+
+                return BusinessLogicLayer.GetTotalEstimation(name, _includeFinnished);
             }
             catch (Exception ex)
             {
@@ -184,11 +191,11 @@ namespace Service
             }
         }
 
-        public DefaultReturnMessage UpdateToDoItemWithEstimate(int id, int estimationtime)
+        public DefaultReturnMessage UpdateToDoItemWithEstimate(UpdateToDoWithEstimate estimate)
         {
             try
             {
-                BusinessLogicLayer.UpdateToDoItemWithEstimate(id, estimationtime);
+                BusinessLogicLayer.UpdateToDoItemWithEstimate(estimate.id, estimate.estimationtime);
                 return new DefaultReturnMessage() { Success = true };
             }
             catch (Exception ex)

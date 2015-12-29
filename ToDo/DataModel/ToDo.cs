@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace DataModel
 {
     [DataContract(Name = "ToDo", Namespace = "Service")]
-    public class ToDo : DefaultReturnMessage
+    public class ToDo
     {
         [DataMember(IsRequired = true, Name = "Id")]
         public int Id { get; set; }

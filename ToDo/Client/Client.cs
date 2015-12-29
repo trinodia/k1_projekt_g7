@@ -4,6 +4,7 @@ using System.ServiceModel.Web;
 using System.ServiceModel.Description;
 using Service;
 using DataModel;
+using DataModel.RequestObjects;
 
 namespace Client
 {
@@ -150,9 +151,9 @@ namespace Client
         private static void GetNumberOfToDoItemsInList(IToDoService channel)
         {
             Console.WriteLine("Calling GetNumberOfToDoItemsInList via HTTP GET: ");
-            var numTodoItemsInList = channel.GetNumberOfToDoItemsInList("Hamid", false);
+            var numTodoItemsInList = channel.GetNumberOfToDoItemsInList("Hamid", bool.FalseString);
             Console.WriteLine("Items in list that are not done: {0}", numTodoItemsInList);
-            numTodoItemsInList = channel.GetNumberOfToDoItemsInList("Hamid", true);
+            numTodoItemsInList = channel.GetNumberOfToDoItemsInList("Hamid", bool.TrueString);
             Console.WriteLine("Items in list that are done: {0}", numTodoItemsInList);
 
             Console.WriteLine("");
@@ -248,7 +249,7 @@ namespace Client
         private static void GetTotalEstimation(IToDoService channel)
         {
             Console.WriteLine("Calling GetTotalEstimation via HTTP GET: ");
-            var totalEstimation = channel.GetTotalEstimation("Hamid", false);
+            var totalEstimation = channel.GetTotalEstimation("Hamid", bool.FalseString);
             Console.WriteLine("   TotalMinutes: {0}", totalEstimation.TotalMinutes);
             Console.WriteLine("   TimeCompleted: {0}", totalEstimation.TimeCompleted);
 
@@ -263,7 +264,7 @@ namespace Client
         private static void UpdateToDoItemWithEstimate(IToDoService channel)
         {
             Console.WriteLine("Calling UpdateToDoItemWithEstimate via HTTP GET: ");
-            var output = channel.UpdateToDoItemWithEstimate(1, 10);
+            var output = channel.UpdateToDoItemWithEstimate(new UpdateToDoWithEstimate() { id = 1, estimationtime = 100 });
 
             if (!string.IsNullOrEmpty(output.ErrorMessage))
             {
@@ -303,7 +304,7 @@ namespace Client
             const int id = 9;
             var newDeadLine = DateTime.Now;
             Console.WriteLine("Calling SetDeadLineToDoItem via HTTP POST: ");
-            channel.SetDeadLineToDoItem(id, newDeadLine);
+            channel.SetDeadLineToDoItem(new SetDeadLineToDoItem() { id = id, newDeadLine = newDeadLine });
         }
 
         private static void GetToDoListOrderedAscendingByDeadLine(IToDoService channel)

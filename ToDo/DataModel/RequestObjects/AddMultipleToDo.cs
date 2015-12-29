@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace DataModel
+namespace DataModel.RequestObjects
 {
     [DataContract(Name = "AddMultipleToDo", Namespace = "Service")]
-    public class AddMultipleToDo : DefaultReturnMessage
+    public class AddMultipleToDo
     {
         [DataMember(IsRequired = true, Name = "Name")]
         public string Name { get; set; }

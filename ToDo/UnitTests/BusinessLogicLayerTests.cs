@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Transactions;
 using BusinessLogic;
 using DataModel;
+using DataModel.RequestObjects;
 
 namespace UnitTests
 {
@@ -175,7 +176,7 @@ namespace UnitTests
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
-                BusinessLogicLayer.AddToDoEntry(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description 2", DeadLine = DateTime.Now, EstimationTime = 10 });
+                BusinessLogicLayer.AddToDoItem(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description 2", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 var items = BusinessLogicLayer.GetToDoListByName("Daniels unique list");
 
@@ -208,7 +209,7 @@ namespace UnitTests
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
-                BusinessLogicLayer.AddToDoEntry(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description 2", DeadLine = DateTime.Now, EstimationTime = 10 });
+                BusinessLogicLayer.AddToDoItem(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description 2", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 var totalEstimation = BusinessLogicLayer.GetTotalEstimation("Daniels unique list", true);
 
