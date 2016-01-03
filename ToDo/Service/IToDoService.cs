@@ -37,22 +37,27 @@ namespace Service
         TotalEstimation GetTotalEstimation(string name, string includeFinnished);
 
         [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "GetToDoListOrderedAscendingByDeadLine/{name}", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [Description("Get ToDoList ordered ascending by deadline.")]
+        ToDoList GetToDoListOrderedAscendingByDeadLine(string name);
+
+        [OperationContract]
         [WebInvoke(Method = "DELETE", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [Description("Removes ToDoItem using supplied ID.")]
         DefaultReturnMessage DeleteToDoItem(int id);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "PUT", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [Description("Create a new ToDoList including first item in the list.")]
         DefaultReturnMessage AddToDoList(ToDo toDo);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "PUT", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [Description("Create a new ToDoItem for ToDoList supplied name.")]
         DefaultReturnMessage AddToDoItem(ToDo toDo);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "PUT", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [Description("Create a multiple ToDoItems for ToDoList supplied name.")]
         DefaultReturnMessage AddToDoItems(AddMultipleToDo toDo);
 
@@ -80,11 +85,6 @@ namespace Service
         [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [Description("Update ToDoItem with deadline.")]
         DefaultReturnMessage SetDeadLineToDoItem(SetDeadLineToDoItem newDeadLine);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "GetToDoListOrderedAscendingByDeadLine/{name}", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        [Description("Get ToDoList ordered ascending by deadline.")]
-        ToDoList GetToDoListOrderedAscendingByDeadLine(string name);
 
     }
 }
