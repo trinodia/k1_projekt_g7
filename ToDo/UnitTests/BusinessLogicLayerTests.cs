@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Transactions;
 using BusinessLogic;
 using DataModel;
-using DataModel.RequestObjects;
 
 namespace UnitTests
 {
@@ -14,47 +13,133 @@ namespace UnitTests
         //Use method naming according too: METHODNAME_CONDITION_EXPECTATION
         //Group tests in a #region named after the method that the tests runs for
 
-        #region DeteleToDo
+        #region GetToDoItemById
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void DeleteToDoListTest_IdIsZero_ThrowingArgumentException()
+        public void GetToDoItemById_IdIsZero_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoItemById(0);
+
+                transaction.Dispose();
+            } 
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetToDoItemById__IdIsLessThenZero_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoItemById(-5);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GetToDoItemById_IdIsNotPresentInDataBase_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10 });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                var id = toDoList.Items.First().Id;
+                id += 1;
+
+                BusinessLogicLayer.GetToDoItemById(id);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public void GetToDoItemById_IdIsPresentInDataBase_ToDoItemIsGotten()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10 });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                var id = toDoList.Items.First().Id;
+                
+                BusinessLogicLayer.GetToDoItemById(id);
+
+                transaction.Dispose();
+            }
+        }
+
+        #endregion
+
+        #region DeleteToDoItem
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DeleteToDoItem_IdIsZero_ThrowingArgumentException()
         {
             using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.DeleteToDoItemById(0);
+
+                transaction.Dispose();
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void DeleteToDoListTest_IdIsLessThenZero_ThrowingArgumentException()
+        public void DeleteToDoItem_IdIsLessThenZero_ThrowingArgumentException()
         {
             using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.DeleteToDoItemById(-5);
+
+                transaction.Dispose();
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void DeleteToDoListTest_IdIsNotPresentInDataBase_ThrowingArgumentException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void DeleteToDoItem_IdIsNotPresentInDataBase_ThrowingArgumentException()
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "test", Description = "test desc" });
-                var toDoList = BusinessLogicLayer.GetToDoListByName("test");
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10 });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
                 var id = toDoList.Items.First().Id;
                 id += 1;
+
                 BusinessLogicLayer.DeleteToDoItemById(id);
+
+                transaction.Dispose();
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void DeleteToDoListTest_IdReferencesTwoToDoItems_ThrowingException()
+        public void DeleteToDoItem_IdIsPresentInDataBase_ToDoItemIsDeleted()
         {
-            throw new Exception(); //TODO: Implement.
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc" , EstimationTime = 10});
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                var id = toDoList.Items.First().Id;
+
+                BusinessLogicLayer.DeleteToDoItemById(id);
+
+                transaction.Dispose();
+            }
         }
+
+        #endregion
+
+        #region FinishToDoItem
 
         #endregion
 
@@ -66,7 +151,9 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "test", Description = "test description", DeadLine = DateTime.Now });
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test description", DeadLine = DateTime.Now });
+
+                transaction.Dispose();
             }
         }
 
@@ -74,11 +161,13 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_NameNotUnique_ThrowsArgumentException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
+
+                transaction.Dispose();
             }
         }
 
@@ -86,9 +175,11 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_NameIsNull_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = null, Description = "Daniels list description" });
+
+                transaction.Dispose();
             }
         }
 
@@ -96,9 +187,11 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_NameIsEmpty_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "", Description = "Daniels list description" });
+
+                transaction.Dispose();
             }
         }
 
@@ -106,9 +199,11 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_NameIsWhitespace_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = " ", Description = "Daniels list description" });
+
+                transaction.Dispose();
             }
         }
 
@@ -117,9 +212,11 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_DescriptionIsNull_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = null });
+
+                transaction.Dispose();
             }
         }
 
@@ -127,9 +224,11 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_DescriptionIsEmpty_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "" });
+
+                transaction.Dispose();
             }
         }
 
@@ -137,19 +236,24 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentException))]
         public void AddToDoList_DescriptionIsWhitespace_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = " " });
+
+                transaction.Dispose();
             }
         }
 
         [TestMethod]
-        public void AddToDoList_DeadlineIsNull_IsAcceptedAndWorks()
+        public void AddToDoList_DeadLineIsNull_IsAcceptedAndWorks()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = null, EstimationTime = 10 });
+
                 Assert.IsTrue(true);
+
+                transaction.Dispose();
             }
         }
 
@@ -157,11 +261,13 @@ namespace UnitTests
         [TestMethod]
         public void AddToDoList_AllOk_IsTrue()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
-                // this test will not be reached if we do not succeed with creating the list
-                Assert.IsTrue(true);
+
+                Assert.IsTrue(true); // This test will not be reached if we do not succeed with creating the list.
+
+                transaction.Dispose();
             }
         }
 
@@ -172,19 +278,19 @@ namespace UnitTests
         [TestMethod]
         public void GetNumberOfToDoItemsInList_CorrectNumberOfItemsReturned_IsTrue()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 BusinessLogicLayer.AddToDoItem(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description 2", DeadLine = DateTime.Now, EstimationTime = 10 });
 
-                var items = BusinessLogicLayer.GetToDoListByName("Daniels unique list");
-
-                var numNotDoneItems = BusinessLogic.BusinessLogicLayer.GetNumberOfToDoItemsInList("Daniels unique list", false);
+                var numNotDoneItems = BusinessLogicLayer.GetNumberOfToDoItemsInList("Daniels unique list", false);
                 Assert.IsTrue(numNotDoneItems.Count == 2);
 
-                var numDoneItems = BusinessLogic.BusinessLogicLayer.GetNumberOfToDoItemsInList("Daniels unique list", true);
+                var numDoneItems = BusinessLogicLayer.GetNumberOfToDoItemsInList("Daniels unique list", true);
                 Assert.IsTrue(numDoneItems.Count == 0);
+
+                transaction.Dispose();
             }
         }
 
@@ -192,9 +298,11 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetNumberOfToDoItemsInList_NameIsNull_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.GetNumberOfToDoItemsInList(null, false);
+                BusinessLogicLayer.GetNumberOfToDoItemsInList(null, false);
+
+                transaction.Dispose();
             }
         }
 
@@ -205,7 +313,7 @@ namespace UnitTests
         [TestMethod]
         public void GetTotalEstimation_CorrectValuesInReturn_IsTrue()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
                 BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
@@ -215,8 +323,14 @@ namespace UnitTests
 
                 Assert.IsTrue(totalEstimation.TotalMinutes == 20);
 
-                // If we are within one minute of correct time, this is correct. Test written like this to ensure it does not fail if test is run at end of one minute causing the test to fail becouse of switch of minute while test is running
+                /* If we are within one minute of correct time, this is correct. 
+                Test written like this to ensure it does not fail if test is 
+                run at end of one minute causing the test to fail because of 
+                switch of minute while test is running*/
+
                 Assert.IsTrue(totalEstimation.TimeCompleted.Minute - DateTime.Now.AddMinutes(20).Minute <= 1);
+
+                transaction.Dispose();
             }
         }
 
@@ -224,9 +338,11 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetTotalEstimation_NameIsNull_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.GetTotalEstimation(null, false);
+                BusinessLogicLayer.GetTotalEstimation(null, false);
+
+                transaction.Dispose();
             }
         }
 
@@ -234,9 +350,11 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetTotalEstimation_NameIsEmpty_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.GetTotalEstimation("", false);
+                BusinessLogicLayer.GetTotalEstimation("", false);
+
+                transaction.Dispose();
             }
         }
 
@@ -244,18 +362,14 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetTotalEstimation_NameIsWhitespace_ThrowsArgumentNullException()
         {
-            using (TransactionScope transaction = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
-                BusinessLogic.BusinessLogicLayer.GetTotalEstimation(" ", false);
+                BusinessLogicLayer.GetTotalEstimation(" ", false);
+
+                transaction.Dispose();
             }
         }
 
         #endregion
-
-
-
-
     }
-
-
 }
