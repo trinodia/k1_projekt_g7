@@ -91,7 +91,7 @@ namespace Service
         {
             try
             {
-                BusinessLogicLayer.AddToDoEntries(toDos);
+                BusinessLogicLayer.AddToDoItems(toDos);
                 return new DefaultReturnMessage() { Success = true };
             }
             catch (Exception ex)

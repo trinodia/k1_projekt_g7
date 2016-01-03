@@ -70,7 +70,7 @@ namespace Client
 
             GetNumberOfToDoItemsInList(channel);
 
-            AddToDoEntry(channel);
+            AddToDoItem(channel);
 
             GetToDoListByDone(channel);
 
@@ -86,7 +86,7 @@ namespace Client
 
             UpdateToDoItemWithEstimate(channel);
 
-            AddToDoEntries(channel);
+            AddToDoItems(channel);
         }
 
 
@@ -164,9 +164,9 @@ namespace Client
             Console.WriteLine("");
         }
 
-        private static void AddToDoEntry(IToDoService channel)
+        private static void AddToDoItem(IToDoService channel)
         {
-            Console.WriteLine("Calling AddToDoEntry via HTTP POST: ");
+            Console.WriteLine("Calling AddToDoItem via HTTP POST: ");
 
             //string AddToDoEntry(string name, string description, DateTime deadline, int estimationtime)
             var output = channel.AddToDoItem(new ToDo() { Name = "Daniels list", Description = "Daniels todo Thingie", DeadLine = DateTime.Now, EstimationTime = 10 });
@@ -179,7 +179,7 @@ namespace Client
             }
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by posting a JSON Object to");
-            Console.WriteLine("http://localhost:8000/AddToDoEntry");
+            Console.WriteLine("http://localhost:8000/AddToDoItem");
             Console.WriteLine("while this sample is running.");
 
             Console.WriteLine("");
@@ -279,9 +279,9 @@ namespace Client
             Console.WriteLine("while this sample is running.");
         }
 
-        private static void AddToDoEntries(IToDoService channel)
+        private static void AddToDoItems(IToDoService channel)
         {
-            Console.WriteLine("Calling AddToDoEntries via HTTP POST: ");
+            Console.WriteLine("Calling AddToDoItems via HTTP POST: ");
 
             var output = channel.AddToDoItems(new AddMultipleToDo() { Name = "Daniels list", Descriptions = "Item 1 todo, Item 2 todo, Item 3 todo", DeadLine = DateTime.Now, EstimationTime = 10 });
 
@@ -293,7 +293,7 @@ namespace Client
             }
             Console.WriteLine("");
             Console.WriteLine("This can also be accomplished by posting a JSON Object to");
-            Console.WriteLine("http://localhost:8000/AddToDoEntries");
+            Console.WriteLine("http://localhost:8000/AddToDoItems");
             Console.WriteLine("while this sample is running.");
 
             Console.WriteLine("");
