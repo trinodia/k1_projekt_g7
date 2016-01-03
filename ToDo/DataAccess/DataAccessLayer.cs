@@ -184,10 +184,7 @@ namespace DataAccess
                 toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
 
                 command.Connection.Close();
-
-                if (toDo == null)
-                    throw new ArgumentException("The specified ID could not be found.");
-
+                
                 return toDo;
             }
         }
