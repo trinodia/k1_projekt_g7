@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataModel.RequestObjects
 {
-    [DataContract]
+    [DataContract(Name = "GetNumberOfToDoItemsInList", Namespace = "Service")]
     public class GetNumberOfToDoItemsInList
     {
         [DataMember]
