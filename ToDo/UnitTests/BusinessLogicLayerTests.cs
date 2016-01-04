@@ -140,7 +140,135 @@ namespace UnitTests
         #endregion
 
         #region FinishToDoItem
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void FinishToDoItem_IdIsZero_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.FinishToDoItem(0);
 
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void FinishToDoItem_IdIsLessThenZero_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.FinishToDoItem(-5);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void FinishToDoItem_IdIsNotPresentInDataBase_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10 });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                var id = toDoList.Items.First().Id;
+                id += 1;
+
+                BusinessLogicLayer.FinishToDoItem(id);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public void FinishToDoItem_IdIsPresentInDataBase_ToDoItemIsFinished()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10, Finnished = false});
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                var id = toDoList.Items.First().Id;
+
+                BusinessLogicLayer.FinishToDoItem(id);
+
+                toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                Assert.IsTrue(toDoList.Items.First().Finnished);
+
+                transaction.Dispose();
+            }
+        }
+        #endregion
+
+        #region UnFinishToDoItem
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UnFinishToDoItem_IdIsZero_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.UnFinishToDoItem(0);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UnFinishToDoItem_IdIsLessThenZero_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.UnFinishToDoItem(-5);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void UnFinishToDoItem_IdIsNotPresentInDataBase_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10 });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                var id = toDoList.Items.First().Id;
+                id += 1;
+
+                BusinessLogicLayer.UnFinishToDoItem(id);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public void UnFinishToDoItem_IdIsPresentInDataBase_ToDoItemIsFinished()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10, Finnished = true });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                var id = toDoList.Items.First().Id;
+
+                BusinessLogicLayer.UnFinishToDoItem(id);
+
+                toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                Assert.IsFalse(toDoList.Items.First().Finnished);
+
+                transaction.Dispose();
+            }
+        }
         #endregion
 
         #region AddToDoList
