@@ -224,9 +224,6 @@ namespace DataAccess
                 }
                 command.Connection.Close();
 
-                if (toDoList == null)
-                    throw new NullReferenceException("A list with the given name could not be retrieved.");
-
                 return toDoList;
             }
         }
