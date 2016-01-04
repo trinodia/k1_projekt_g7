@@ -18,23 +18,9 @@ namespace BusinessLogic
         {
             var dbSession = new DataAccessLayer();
 
-            var toDoItem = dbSession.GetToDoById(id);
+            var toDoItem = dbSession.GetToDoById(id); // GetToDoById includes check if item exists. Throws exception if it does not exist.
 
             return toDoItem;
-        }
-
-        /// <summary>
-        /// Gets a list of ToDo items by the lists name
-        /// </summary>
-        /// <param name="name">ToDoLists name</param>
-        /// <returns>ToDoList object</returns>
-        public static ToDoList GetToDoListByName(string name)
-        {
-            var dbSession = new DataAccessLayer();
-
-            var toDoList = dbSession.GetToDoListByName(name);
-
-            return new ToDoList() { Success = true, Count = toDoList.Count, Name = toDoList.First().Name, Items = toDoList };
         }
 
         /// <summary>
@@ -44,9 +30,8 @@ namespace BusinessLogic
         public static void DeleteToDoItemById(int id)
         {
             var dbSession = new DataAccessLayer();
-
-            // GetToDoById includes check if item exists. Throws exception if it does not exist.
-            dbSession.GetToDoById(id);
+            
+            dbSession.GetToDoById(id); // GetToDoById includes check if item exists. Throws exception if it does not exist.
 
             dbSession.DeleteToDo(id);
         }
@@ -100,6 +85,20 @@ namespace BusinessLogic
             toDoItemToUpdateDeadLineFor.DeadLine = newDeadLine;
 
             dbSession.UpdateToDo(toDoItemToUpdateDeadLineFor);
+        }
+
+        /// <summary>
+        /// Gets a list of ToDoItems by the lists name
+        /// </summary>
+        /// <param name="name">ToDoLists name</param>
+        /// <returns>ToDoList object</returns>
+        public static ToDoList GetToDoListByName(string name)
+        {
+            var dbSession = new DataAccessLayer();
+
+            var toDoList = dbSession.GetToDoListByName(name);
+
+            return new ToDoList() { Success = true, Count = toDoList.Count, Name = toDoList.First().Name, Items = toDoList };
         }
 
         /// <summary>
