@@ -205,7 +205,7 @@ namespace DataAccess
 
                 conn = new SqlConnection(connString);
 
-                string sqlSelectString = "select * from ToDoList where Name like '" + name + "'";
+                string sqlSelectString = "select * from ToDoList where Name = '" + name + "'";
                 command = new SqlCommand(sqlSelectString, conn);
                 command.Connection.Open();
 
