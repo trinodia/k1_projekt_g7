@@ -23,7 +23,7 @@ namespace UnitTests
                 BusinessLogicLayer.GetToDoItemById(0);
 
                 transaction.Dispose();
-            } 
+            }
         }
 
         [TestMethod]
@@ -67,13 +67,46 @@ namespace UnitTests
                 var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
 
                 var id = toDoList.Items.First().Id;
-                
+
                 BusinessLogicLayer.GetToDoItemById(id);
 
                 transaction.Dispose();
             }
         }
 
+        #endregion
+
+        #region AddToDoItem
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoItem_ListNameDoesNotExist_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new ToDo() { Name = "testList", Description = "testItem" };
+
+                BusinessLogicLayer.AddToDoItem(toDoItem);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public void AddToDoItem_AllOk_ToDoItemIsAdded()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem1 = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+
+                var toDoItem2 = new ToDo() { Name = "testList", Description = "testItem2", EstimationTime = 10 };
+
+                BusinessLogicLayer.AddToDoList(toDoItem1);
+
+                BusinessLogicLayer.AddToDoItem(toDoItem2);
+
+                transaction.Dispose();
+            }
+        }
         #endregion
 
         #region DeleteToDoItem
@@ -125,7 +158,7 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc" , EstimationTime = 10});
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10 });
 
                 var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
 
@@ -188,7 +221,7 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10, Finnished = false});
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10, Finnished = false });
 
                 var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
 
@@ -279,7 +312,7 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test description", DeadLine = DateTime.Now });
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "test", Description = "test description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 transaction.Dispose();
             }
@@ -291,9 +324,9 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list unique", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list unique", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 transaction.Dispose();
             }
