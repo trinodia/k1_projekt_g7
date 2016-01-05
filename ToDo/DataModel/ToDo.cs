@@ -32,7 +32,7 @@ namespace DataModel
         {
             CreatedDate = DateTime.Now;
             DeadLine = new DateTime(1800, 1, 1);
-            EstimationTime = -1;
+            EstimationTime = 0;
         }
 
         public bool Validate()
@@ -47,7 +47,7 @@ namespace DataModel
             if(DeadLine == null)
                 DeadLine = new DateTime(1800, 1, 1);
 
-            if (EstimationTime <= 0)
+            if (EstimationTime < 0)
                 throw new ArgumentException("The Estimated time must be positive.");
 
             return true;

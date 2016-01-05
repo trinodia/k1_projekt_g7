@@ -279,7 +279,7 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test description", DeadLine = DateTime.Now });
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "test", Description = "test description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 transaction.Dispose();
             }
@@ -291,9 +291,9 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
-                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "Daniels unique list", Description = "Daniels list description", DeadLine = DateTime.Now, EstimationTime = 10 });
 
                 transaction.Dispose();
             }
