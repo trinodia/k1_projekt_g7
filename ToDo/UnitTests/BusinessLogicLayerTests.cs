@@ -25,7 +25,7 @@ namespace UnitTests
                 BusinessLogicLayer.GetToDoItemById(0);
 
                 transaction.Dispose();
-            }
+            } 
         }
 
         [TestMethod]
@@ -69,7 +69,7 @@ namespace UnitTests
                 var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
 
                 var id = toDoList.Items.First().Id;
-
+                
                 BusinessLogicLayer.GetToDoItemById(id);
 
                 transaction.Dispose();
