@@ -196,123 +196,6 @@ namespace UnitTests
         }
         #endregion
 
-        #region AddToDoItems
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void AddToDoItems_ListNameDoesNotExist_ThrowingArgumentException()
-        {
-            using (var transaction = new TransactionScope())
-            {
-                var toDoItems = new AddMultipleToDo() { Name = "testList", Descriptions = "testItem, testItem2, testItem3" };
-
-                BusinessLogicLayer.AddToDoItems(toDoItems);
-
-                transaction.Dispose();
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void AddToDoItems_ListNameIsEmpty_ThrowingArgumentException()
-        {
-            using (var transaction = new TransactionScope())
-            {
-                var toDoItem = new AddMultipleToDo() { Name = "", Descriptions = "testItem" };
-
-                BusinessLogicLayer.AddToDoItems(toDoItem);
-
-                transaction.Dispose();
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void AddToDoItems_ListNameIsNull_ThrowingArgumentException()
-        {
-            using (var transaction = new TransactionScope())
-            {
-                var toDoItem = new AddMultipleToDo() { Name = null, Descriptions = "testItem" };
-
-                BusinessLogicLayer.AddToDoItems(toDoItem);
-
-                transaction.Dispose();
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void AddToDoItems_ListNameIsWhitespace_ThrowingArgumentException()
-        {
-            using (var transaction = new TransactionScope())
-            {
-                var toDoItem = new AddMultipleToDo() { Name = " ", Descriptions = "testItem" };
-                
-                BusinessLogicLayer.AddToDoItems(toDoItem);
-
-                transaction.Dispose();
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void AddToDoItems_DescriptionIsEmpty_ThrowingArgumentException()
-        {
-            using (var transaction = new TransactionScope())
-            {
-                var toDoItem = new AddMultipleToDo() { Name = "testList", Descriptions = "" };
-
-                BusinessLogicLayer.AddToDoItems(toDoItem);
-
-                transaction.Dispose();
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void AddToDoItems_DescriptionIsNull_ThrowingArgumentException()
-        {
-            using (var transaction = new TransactionScope())
-            {
-                var toDoItem = new AddMultipleToDo() { Name = "testList", Descriptions = null };
-
-                BusinessLogicLayer.AddToDoItems(toDoItem);
-
-                transaction.Dispose();
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void AddToDoItems_DescriptionIsWhitespace_ThrowingArgumentException()
-        {
-            using (var transaction = new TransactionScope())
-            {
-                var toDoItem = new AddMultipleToDo() { Name = "testList", Descriptions = " " };
-
-                BusinessLogicLayer.AddToDoItems(toDoItem);
-
-                transaction.Dispose();
-            }
-        }
-
-        [TestMethod]
-        public void AddToDoItems_AllOk_ToDoItemsIsAdded()
-        {
-            using (var transaction = new TransactionScope())
-            {
-                var toDoItem1 = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
-
-                var toDoItems = new AddMultipleToDo() { Name = "testList", Descriptions = "testItem, testItem2, testItem3" };
-
-                BusinessLogicLayer.AddToDoList(toDoItem1);
-
-                BusinessLogicLayer.AddToDoItems(toDoItems);
-
-                transaction.Dispose();
-            }
-        }
-        #endregion
-
         #region UpdateToDoItemWithEstimate 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -647,7 +530,122 @@ namespace UnitTests
         #endregion
 
         #region ToDoItems
+        #region AddToDoItems
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoItems_ListNameDoesNotExist_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItems = new AddMultipleToDo() { Name = "testList", Descriptions = "testItem, testItem2, testItem3" };
 
+                BusinessLogicLayer.AddToDoItems(toDoItems);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoItems_ListNameIsEmpty_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new AddMultipleToDo() { Name = "", Descriptions = "testItem" };
+
+                BusinessLogicLayer.AddToDoItems(toDoItem);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoItems_ListNameIsNull_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new AddMultipleToDo() { Name = null, Descriptions = "testItem" };
+
+                BusinessLogicLayer.AddToDoItems(toDoItem);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoItems_ListNameIsWhitespace_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new AddMultipleToDo() { Name = " ", Descriptions = "testItem" };
+
+                BusinessLogicLayer.AddToDoItems(toDoItem);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoItems_DescriptionIsEmpty_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new AddMultipleToDo() { Name = "testList", Descriptions = "" };
+
+                BusinessLogicLayer.AddToDoItems(toDoItem);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoItems_DescriptionIsNull_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new AddMultipleToDo() { Name = "testList", Descriptions = null };
+
+                BusinessLogicLayer.AddToDoItems(toDoItem);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddToDoItems_DescriptionIsWhitespace_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new AddMultipleToDo() { Name = "testList", Descriptions = " " };
+
+                BusinessLogicLayer.AddToDoItems(toDoItem);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public void AddToDoItems_AllOk_ToDoItemsIsAdded()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem1 = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+
+                var toDoItems = new AddMultipleToDo() { Name = "testList", Descriptions = "testItem, testItem2, testItem3" };
+
+                BusinessLogicLayer.AddToDoList(toDoItem1);
+
+                BusinessLogicLayer.AddToDoItems(toDoItems);
+
+                transaction.Dispose();
+            }
+        }
+        #endregion
         #endregion
 
         #region ToDoList
