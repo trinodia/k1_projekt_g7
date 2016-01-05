@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Transactions;
@@ -14,6 +15,7 @@ namespace UnitTests
         //Use method naming according too: METHODNAME_CONDITION_EXPECTATION
         //Group tests in a #region named after the method that the tests runs for
 
+        #region ToDoItem
         #region GetToDoItemById
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -24,7 +26,7 @@ namespace UnitTests
                 BusinessLogicLayer.GetToDoItemById(0);
 
                 transaction.Dispose();
-            } 
+            }
         }
 
         [TestMethod]
@@ -68,7 +70,7 @@ namespace UnitTests
                 var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
 
                 var id = toDoList.Items.First().Id;
-                
+
                 BusinessLogicLayer.GetToDoItemById(id);
 
                 transaction.Dispose();
@@ -574,6 +576,81 @@ namespace UnitTests
         }
         #endregion
 
+        #region SetDeadLineToDoItem
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void SetDeadLineToDoItem_IdIsZero_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.SetDeadLineToDoItem(0, DateTime.Now);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void SetDeadLineToDoItem__IdIsLessThenZero_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.SetDeadLineToDoItem(-5, DateTime.Now);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void SetDeadLineToDoItem_IdIsNotPresentInDataBase_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10 });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                var id = toDoList.Items.First().Id;
+                id += 1;
+
+                BusinessLogicLayer.SetDeadLineToDoItem(id, DateTime.Now);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public void SetDeadLineToDoItem_IdIsPresentInDataBase_ToDoItemGetsNewDeadLine()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testing", Description = "test desc", EstimationTime = 10 });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByName("testing");
+
+                var id = toDoList.Items.First().Id;
+
+                var newDeadLine = DateTime.Now;
+
+                BusinessLogicLayer.SetDeadLineToDoItem(id, newDeadLine);
+
+                var toDoItem = BusinessLogicLayer.GetToDoItemById(id);
+
+                Assert.AreEqual(newDeadLine.ToString(CultureInfo.CurrentCulture), toDoItem.DeadLine.ToString());
+
+                transaction.Dispose();
+            }
+        }
+
+        #endregion
+        #endregion
+
+        #region ToDoItems
+
+        #endregion
+
+        #region ToDoList
         #region AddToDoList
 
         [TestMethod]
@@ -801,6 +878,7 @@ namespace UnitTests
             }
         }
 
+        #endregion
         #endregion
     }
 }
