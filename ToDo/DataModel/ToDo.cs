@@ -7,7 +7,7 @@ namespace DataModel
     [DataContract(Name = "ToDo", Namespace = "Service")]
     public class ToDo
     {
-        [DataMember(IsRequired = true, Name = "Id")]
+        [DataMember(Name = "Id")]
         public int Id { get; set; }
 
         [DataMember(IsRequired = true, Name = "Name")]
@@ -41,7 +41,7 @@ namespace DataModel
                 throw new ArgumentException("You must supply a name for the list to add items to.");
 
             if (string.IsNullOrWhiteSpace(Description))
-                throw new ArgumentException("You must supply a desctiption to add to the list.");
+                throw new ArgumentException("You must supply a description to add to the list.");
 
             // If no deadline is provided, set a default deadline
             if(DeadLine == null)

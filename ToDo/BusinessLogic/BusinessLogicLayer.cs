@@ -9,6 +9,9 @@ namespace BusinessLogic
 {
     public class BusinessLogicLayer
     {
+
+        #region ToDoItem
+
         /// <summary>
         /// Gets a specific ToDoItem by ID
         /// </summary>
@@ -24,13 +27,30 @@ namespace BusinessLogic
         }
 
         /// <summary>
+        /// Create ToDoItem for existing list
+        /// </summary>
+        /// <param name="toDo">ToDoItem to add</param>
+        public static void AddToDoItem(ToDo toDo)
+        {
+            if (toDo.Validate())
+            {
+                var dbSession = new DataAccessLayer();
+
+                if (!dbSession.GetToDoListByName(toDo.Name).Any())
+                    throw new ArgumentException("A list must be created first.");
+
+                dbSession.AddToDo(toDo);
+            }
+        }
+
+        /// <summary>
         /// Delete a ToDoItem by ID
         /// </summary>
         /// <param name="id">ToDoItems ID</param>
         public static void DeleteToDoItemById(int id)
         {
             var dbSession = new DataAccessLayer();
-            
+
             dbSession.GetToDoById(id); // GetToDoById includes check if item exists. Throws exception if it does not exist.
 
             dbSession.DeleteToDo(id);
@@ -88,55 +108,24 @@ namespace BusinessLogic
         }
 
         /// <summary>
-        /// Gets a list of ToDoItems by the lists name
+        /// Update ToDoItem with estimate
         /// </summary>
-        /// <param name="name">ToDoLists name</param>
-        /// <returns>ToDoList object</returns>
-        public static ToDoList GetToDoListByName(string name)
+        /// <param name="id">ToDoItems ID</param>
+        /// <param name="estimationtime">Estimationtime to update with</param>
+        public static void UpdateToDoItemWithEstimate(int id, int estimationtime)
         {
             var dbSession = new DataAccessLayer();
 
-            var toDoList = dbSession.GetToDoListByName(name);
+            var toDoItem = dbSession.GetToDoById(id);
 
-            return new ToDoList() { Success = true, Count = toDoList.Count, Name = toDoList.First().Name, Items = toDoList };
+            toDoItem.EstimationTime = estimationtime;
+
+            dbSession.UpdateToDo(toDoItem);
         }
 
-        /// <summary>
-        /// Create a new ToDoList
-        /// </summary>
-        /// <param name="toDo">First ToDoItem in the list to create</param>
-        public static void AddToDoList(ToDo toDo)
-        {
-            if (toDo.Validate())
-            {
-                if (toDo.Name.Length < 6)
-                    throw new ArgumentException("The name of the list most be at least 6 chars.");
+        #endregion
 
-                var dbSession = new DataAccessLayer();
-
-                if (dbSession.GetToDoListByName(toDo.Name).Count > 0)
-                    throw new ArgumentException("A list with this name already exists and the name of a list most be unique.");
-
-                dbSession.AddToDo(toDo);
-            }
-        }
-
-        /// <summary>
-        /// Create ToDoItem for existing list
-        /// </summary>
-        /// <param name="toDo">ToDoItem to add</param>
-        public static void AddToDoItem(ToDo toDo)
-        {
-            if (toDo.Validate())
-            {
-                var dbSession = new DataAccessLayer();
-
-                if (!dbSession.GetToDoListByName(toDo.Name).Any())
-                    throw new ArgumentException("A list must be created first.");
-
-                dbSession.AddToDo(toDo);
-            }
-        }
+        #region ToDoItems
 
         /// <summary>
         /// Create multiple ToDoItems for existing list
@@ -170,6 +159,24 @@ namespace BusinessLogic
             }
         }
 
+        #endregion
+
+        #region ToDoList
+
+        /// <summary>
+        /// Gets a list of ToDoItems by the lists name
+        /// </summary>
+        /// <param name="name">ToDoLists name</param>
+        /// <returns>ToDoList object</returns>
+        public static ToDoList GetToDoListByName(string name)
+        {
+            var dbSession = new DataAccessLayer();
+
+            var toDoList = dbSession.GetToDoListByName(name);
+
+            return new ToDoList() { Success = true, Count = toDoList.Count, Name = toDoList.First().Name, Items = toDoList };
+        }
+
         /// <summary>
         /// Get ToDoItems in list that is Finnished
         /// </summary>
@@ -187,35 +194,6 @@ namespace BusinessLogic
         }
 
         /// <summary>
-        /// Gets number of ToDoItems in list
-        /// </summary>
-        /// <param name="name">Name of list</param>
-        /// <param name="finnished">Count finnished or unfinnished items</param>
-        /// <returns></returns>
-        public static NumToDoItems GetNumberOfToDoItemsInList(string name, bool finnished)
-        {
-            var dbSession = new DataAccessLayer();
-
-            var toDoList = dbSession.GetToDoListByName(name);
-
-            // return how many items that was removed
-            return new NumToDoItems() { Success = true, Count = toDoList.RemoveAll(x => x.Finnished == finnished) };
-        }
-
-        /// <summary>
-        /// Update ToDoItem with new information
-        /// </summary>
-        /// <param name="toDo">ToDoItem to update, new information already set in item and ID set to existing one in DB</param>
-        public static void UpdateToDoItem(ToDo toDo)
-        {
-            if (toDo.Validate())
-            {
-                var dbSession = new DataAccessLayer();
-                dbSession.UpdateToDo(toDo);
-            }
-        }
-
-        /// <summary>
         /// Get ToDoItems in list that is important
         /// </summary>
         /// <param name="name">Name of list</param>
@@ -229,22 +207,6 @@ namespace BusinessLogic
             toDoList.RemoveAll(x => x.Description.EndsWith("!") != true);
 
             return new ToDoList() { Success = true, Count = toDoList.Count, Name = toDoList.First().Name, Items = toDoList };
-        }
-
-        /// <summary>
-        /// Update ToDoItem with estimate
-        /// </summary>
-        /// <param name="id">ToDoItems ID</param>
-        /// <param name="estimationtime">Estimationtime to update with</param>
-        public static void UpdateToDoItemWithEstimate(int id, int estimationtime)
-        {
-            var dbSession = new DataAccessLayer();
-
-            var toDoItem = dbSession.GetToDoById(id);
-
-            toDoItem.EstimationTime = estimationtime;
-
-            dbSession.UpdateToDo(toDoItem);
         }
 
         /// <summary>
@@ -282,6 +244,56 @@ namespace BusinessLogic
 
             return new ToDoList() { Name = toDoListOrderedAscendingByDeadLine.First().Name, Count = toDoListOrderedAscendingByDeadLine.Count, Items = toDoListOrderedAscendingByDeadLine, Success = true };
         }
+        
+        /// <summary>
+        /// Gets number of ToDoItems in list
+        /// </summary>
+        /// <param name="name">Name of list</param>
+        /// <param name="finnished">Count finnished or unfinnished items</param>
+        /// <returns></returns>
+        public static NumToDoItems GetNumberOfToDoItemsInList(string name, bool finnished)
+        {
+            var dbSession = new DataAccessLayer();
+
+            var toDoList = dbSession.GetToDoListByName(name);
+
+            // return how many items that was removed
+            return new NumToDoItems() { Success = true, Count = toDoList.RemoveAll(x => x.Finnished == finnished) };
+        }
+
+        /// <summary>
+        /// Create a new ToDoList
+        /// </summary>
+        /// <param name="toDo">First ToDoItem in the list to create</param>
+        public static void AddToDoList(ToDo toDo)
+        {
+            if (toDo.Validate())
+            {
+                if (toDo.Name.Length < 6)
+                    throw new ArgumentException("The name of the list most be at least 6 chars.");
+
+                var dbSession = new DataAccessLayer();
+
+                if (dbSession.GetToDoListByName(toDo.Name).Count > 0)
+                    throw new ArgumentException("A list with this name already exists and the name of a list most be unique.");
+
+                dbSession.AddToDo(toDo);
+            }
+        }
+
+        /// <summary>
+        /// Update ToDoItem with new information
+        /// </summary>
+        /// <param name="toDo">ToDoItem to update, new information already set in item and ID set to existing one in DB</param>
+        public static void UpdateToDoItem(ToDo toDo)
+        {
+            if (toDo.Validate())
+            {
+                var dbSession = new DataAccessLayer();
+                dbSession.UpdateToDo(toDo);
+            }
+        }
+        #endregion
     }
 
 }
