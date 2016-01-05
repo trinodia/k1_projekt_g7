@@ -184,10 +184,7 @@ namespace DataAccess
                 toDo.Finnished = reader.GetBoolean(reader.GetOrdinal("Finnished"));
 
                 command.Connection.Close();
-
-                if (toDo == null)
-                    throw new ArgumentException("The specified ID could not be found.");
-
+                
                 return toDo;
             }
         }
@@ -208,7 +205,7 @@ namespace DataAccess
 
                 conn = new SqlConnection(connString);
 
-                string sqlSelectString = "select * from ToDoList where Name like '%" + name + "%'";
+                string sqlSelectString = "select * from ToDoList where Name = '" + name + "'";
                 command = new SqlCommand(sqlSelectString, conn);
                 command.Connection.Open();
 
@@ -226,9 +223,6 @@ namespace DataAccess
                     toDoList.Add(toDo);
                 }
                 command.Connection.Close();
-
-                if (toDoList == null)
-                    throw new NullReferenceException("A list with the given name could not be retrieved.");
 
                 return toDoList;
             }

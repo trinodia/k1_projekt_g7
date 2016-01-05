@@ -58,7 +58,7 @@ namespace Service
 
         [OperationContract]
         [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        [Description("Create a multiple ToDoItems for ToDoList supplied name.")]
+        [Description("Create multiple ToDoItems for ToDoList supplied name.")]
         DefaultReturnMessage AddToDoItems(AddMultipleToDo toDo);
 
         [OperationContract]

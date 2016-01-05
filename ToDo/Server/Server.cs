@@ -31,6 +31,20 @@ namespace Server
 
                     Console.WriteLine("Webservice started on: " + Url);
                     Console.WriteLine("Go to " + Url + "/help for information about functionality.");
+
+                    Console.Write("Do you want to run the self-tests? Y/N: ");
+                    var input = Console.ReadLine();
+                    if (input.ToLower() == "y")
+                    {
+                        var channel = cf.CreateChannel();
+                        var tests = new SelfTests()
+                        {
+                            Channel = channel
+                        };
+
+                        tests.RunTests();
+                    }
+
                 }
 
                 Console.WriteLine("Press <ENTER> to terminate.");

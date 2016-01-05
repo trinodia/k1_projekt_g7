@@ -7,7 +7,7 @@ namespace DataModel
     [DataContract(Name = "ToDo", Namespace = "Service")]
     public class ToDo
     {
-        [DataMember(IsRequired = true, Name = "Id")]
+        [DataMember(Name = "Id")]
         public int Id { get; set; }
 
         [DataMember(IsRequired = true, Name = "Name")]
@@ -32,7 +32,7 @@ namespace DataModel
         {
             CreatedDate = DateTime.Now;
             DeadLine = new DateTime(1800, 1, 1);
-            EstimationTime = -1;
+            EstimationTime = 0;
         }
 
         public bool Validate()
@@ -41,13 +41,13 @@ namespace DataModel
                 throw new ArgumentException("You must supply a name for the list to add items to.");
 
             if (string.IsNullOrWhiteSpace(Description))
-                throw new ArgumentException("You must supply a desctiption to add to the list.");
+                throw new ArgumentException("You must supply a description to add to the list.");
 
             // If no deadline is provided, set a default deadline
             if(DeadLine == null)
                 DeadLine = new DateTime(1800, 1, 1);
 
-            if (EstimationTime <= 0)
+            if (EstimationTime < 0)
                 throw new ArgumentException("The Estimated time must be positive.");
 
             return true;
