@@ -86,7 +86,10 @@ namespace DataAccess
                 SqlParameter flagParam = new SqlParameter("@finnished", toDo.Finnished ? 1 : 0);
 
                 command.Parameters.AddRange(new SqlParameter[] { descriptionParam, userParam, createdParam, deadLineParam, estimateParam, flagParam });
-                command.ExecuteNonQuery();
+                var numResult = command.ExecuteNonQuery();
+                if (numResult == 0)
+                    throw new InvalidOperationException("No rows updated, check if ID exists in database.");
+
                 command.Connection.Close();
             }
         }

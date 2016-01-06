@@ -32,7 +32,6 @@ namespace Service
             {
                 return new DefaultReturnMessage() { Success = false, ErrorMessage = ex.Message, ErrorType = ex.GetType().ToString() };
             }
-            //TODO: Write "" to browser.
         }
 
         public DefaultReturnMessage FinishToDoItem(int id)

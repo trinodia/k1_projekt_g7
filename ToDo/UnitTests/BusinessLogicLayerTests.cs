@@ -196,6 +196,194 @@ namespace UnitTests
         }
         #endregion
 
+        #region UpdateToDoItem
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UpdateToDoItem_ListNameDoesNotExist_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+                BusinessLogicLayer.AddToDoList(toDoItem);
+
+                var toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+                var toDoItemToUpdate = toDoItems.Items.First();
+
+                toDoItemToUpdate.DeadLine = DateTime.Now.AddDays(7);
+                toDoItemToUpdate.Name = "this list does not exist";
+                BusinessLogicLayer.UpdateToDoItem(toDoItemToUpdate);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UpdateToDoItem_ListNameIsEmpty_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+                BusinessLogicLayer.AddToDoList(toDoItem);
+
+                var toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+                var toDoItemToUpdate = toDoItems.Items.First();
+
+                toDoItemToUpdate.DeadLine = DateTime.Now.AddDays(7);
+                toDoItemToUpdate.Name = "";
+                BusinessLogicLayer.UpdateToDoItem(toDoItemToUpdate);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UpdateToDoItem_ListNameIsNull_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+                BusinessLogicLayer.AddToDoList(toDoItem);
+
+                var toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+                var toDoItemToUpdate = toDoItems.Items.First();
+
+                toDoItemToUpdate.DeadLine = DateTime.Now.AddDays(7);
+                toDoItemToUpdate.Name = null;
+                BusinessLogicLayer.UpdateToDoItem(toDoItemToUpdate);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UpdateToDoItem_ListNameIsWhitespace_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+                BusinessLogicLayer.AddToDoList(toDoItem);
+
+                var toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+                var toDoItemToUpdate = toDoItems.Items.First();
+
+                toDoItemToUpdate.DeadLine = DateTime.Now.AddDays(7);
+                toDoItemToUpdate.Name = " ";
+                BusinessLogicLayer.UpdateToDoItem(toDoItemToUpdate);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UpdateToDoItem_DescriptionIsEmpty_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+                BusinessLogicLayer.AddToDoList(toDoItem);
+
+                var toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+                var toDoItemToUpdate = toDoItems.Items.First();
+
+                toDoItemToUpdate.DeadLine = DateTime.Now.AddDays(7);
+                toDoItemToUpdate.Description = "";
+                BusinessLogicLayer.UpdateToDoItem(toDoItemToUpdate);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UpdateToDoItem_DescriptionIsNull_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+                BusinessLogicLayer.AddToDoList(toDoItem);
+
+                var toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+                var toDoItemToUpdate = toDoItems.Items.First();
+
+                toDoItemToUpdate.DeadLine = DateTime.Now.AddDays(7);
+                toDoItemToUpdate.Description = null;
+                BusinessLogicLayer.UpdateToDoItem(toDoItemToUpdate);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UpdateToDoItem_DescriptionIsWhitespace_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+                BusinessLogicLayer.AddToDoList(toDoItem);
+
+                var toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+                var toDoItemToUpdate = toDoItems.Items.First();
+
+                toDoItemToUpdate.DeadLine = DateTime.Now.AddDays(7);
+                toDoItemToUpdate.Description = " ";
+                BusinessLogicLayer.UpdateToDoItem(toDoItemToUpdate);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void UpdateToDoItem_IDDoesNotExist_ThrowingArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem1 = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+                var toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+
+                var toDoItem = new ToDo() { Id = 999999999, Name = "testList", Description = "testItem1", EstimationTime = 10 };
+                BusinessLogicLayer.UpdateToDoItem(toDoItem);
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public void UpdateToDoItem_AllOk_ToDoItemIsAdded()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var toDoItem1 = new ToDo() { Name = "testList", Description = "testItem1", EstimationTime = 10 };
+
+                var toDoItem2 = new ToDo() { Name = "testList", Description = "testItem2", EstimationTime = 10 };
+
+                BusinessLogicLayer.AddToDoList(toDoItem1);
+                BusinessLogicLayer.AddToDoItem(toDoItem2);
+
+                var toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+
+                var toDoItemToUpdate = toDoItems.Items.First();
+
+                var newDeadLine = new DateTime(2015, 12, 12, 12, 12, 12);
+
+                toDoItemToUpdate.DeadLine = newDeadLine;
+
+                BusinessLogicLayer.UpdateToDoItem(toDoItemToUpdate);
+
+                toDoItems = BusinessLogicLayer.GetToDoListByName("testList");
+
+                Assert.IsTrue(newDeadLine.ToShortDateString() == toDoItems.Items.First().DeadLine.Value.ToShortDateString() && newDeadLine.ToShortTimeString() == toDoItems.Items.First().DeadLine.Value.ToShortTimeString());
+
+                transaction.Dispose();
+            }
+        }
+        #endregion
+
+
         #region UpdateToDoItemWithEstimate 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -689,8 +877,6 @@ namespace UnitTests
             }
         }
 
-        //TODO: Add test case for non existing list name.
-
         [TestMethod]
         public void GetToDoListByName_AllOk_ToDoListIsGotten()
         {
@@ -704,6 +890,7 @@ namespace UnitTests
             }
         }
         #endregion
+
 
         #region GetToDoListOrderedAscendingByDeadLine
         [TestMethod]
@@ -742,7 +929,6 @@ namespace UnitTests
             }
         }
 
-        //TODO: Add test case for non existing list name.
 
         [TestMethod]
         public void GetToDoListOrderedAscendingByDeadLine_AllOk_ToDoListOrderedAscendingByDeadLineIsGotten()

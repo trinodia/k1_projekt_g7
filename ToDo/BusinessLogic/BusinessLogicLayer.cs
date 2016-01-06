@@ -290,6 +290,10 @@ namespace BusinessLogic
             if (toDo.Validate())
             {
                 var dbSession = new DataAccessLayer();
+
+                if (dbSession.GetToDoListByName(toDo.Name).Count == 0)
+                    throw new ArgumentException("A list with this name can not be found.");
+
                 dbSession.UpdateToDo(toDo);
             }
         }
