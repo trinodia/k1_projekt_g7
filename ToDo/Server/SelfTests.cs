@@ -66,6 +66,10 @@ namespace Server
                         Channel.DeleteToDoItem(item.Id);
                     }
 
+                    Console.WriteLine(" -- -- -- -- ");
+                    Console.WriteLine("All tests run and passed OK!");
+                    Console.WriteLine(" -- -- -- -- ");
+
                 }
                 catch (Exception ex)
                 {

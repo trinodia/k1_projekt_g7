@@ -903,6 +903,138 @@ namespace UnitTests
         }
         #endregion
 
+        #region GetToDoListByDone
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetToDoListByDone_NameIsNull_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListByDone(null);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetToDoListByDone_NameIsEmpty_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListByDone("");
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetToDoListByDone_NameIsWhitespace_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListByDone("       ");
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GetToDoListByDone_ListNameDoesNotExistInDataBase_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListByDone("NonExistingListName");
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public void GetToDoListByDone_AllOk_ToDoListIsGotten()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testList", Description = "test description", DeadLine = DateTime.Now, EstimationTime = 10, Finnished = true });
+                BusinessLogicLayer.AddToDoItem(new ToDo() { Name = "testList", Description = "test description", DeadLine = DateTime.Now, EstimationTime = 10, Finnished = false });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByDone("testList");
+
+                Assert.IsTrue(toDoList.Count == 1);
+
+                transaction.Dispose();
+            }
+        }
+        #endregion
+
+        #region GetToDoListByVIP
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetToDoListByVip_NameIsNull_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListByVip(null);
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetToDoListByVip_NameIsEmpty_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListByVip("");
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetToDoListByVip_NameIsWhitespace_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListByVip("       ");
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GetToDoListByVip_ListNameDoesNotExistInDataBase_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListByVip("NonExistingListName");
+
+                transaction.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public void GetToDoListByVip_AllOk_ToDoListIsGotten()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.AddToDoList(new ToDo() { Name = "testList", Description = "test description", DeadLine = DateTime.Now, EstimationTime = 10 });
+                BusinessLogicLayer.AddToDoItem(new ToDo() { Name = "testList", Description = "test description!", DeadLine = DateTime.Now, EstimationTime = 10 });
+
+                var toDoList = BusinessLogicLayer.GetToDoListByVip("testList");
+
+                Assert.IsTrue(toDoList.Count == 1);
+
+                transaction.Dispose();
+            }
+        }
+        #endregion
+
 
         #region GetToDoListOrderedAscendingByDeadLine
         [TestMethod]
