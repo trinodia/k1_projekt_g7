@@ -689,7 +689,17 @@ namespace UnitTests
             }
         }
 
-        //TODO: Add test case for non existing list name.
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GetToDoListByName_ListNameDoesNotExistInDataBase_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListByName("NonExistingListName");
+
+                transaction.Dispose();
+            }
+        }
 
         [TestMethod]
         public void GetToDoListByName_AllOk_ToDoListIsGotten()
@@ -712,7 +722,7 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.GetToDoListByName(null);
+                BusinessLogicLayer.GetToDoListOrderedAscendingByDeadLine(null);
 
                 transaction.Dispose();
             }
@@ -724,7 +734,7 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.GetToDoListByName("");
+                BusinessLogicLayer.GetToDoListOrderedAscendingByDeadLine("");
 
                 transaction.Dispose();
             }
@@ -736,13 +746,23 @@ namespace UnitTests
         {
             using (var transaction = new TransactionScope())
             {
-                BusinessLogicLayer.GetToDoListByName("       ");
+                BusinessLogicLayer.GetToDoListOrderedAscendingByDeadLine("       ");
 
                 transaction.Dispose();
             }
         }
 
-        //TODO: Add test case for non existing list name.
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GetToDoListOrderedAscendingByDeadLine_ListNameDoesNotExistInDataBase_ThrowsArgumentException()
+        {
+            using (var transaction = new TransactionScope())
+            {
+                BusinessLogicLayer.GetToDoListOrderedAscendingByDeadLine("NonExistingListName");
+
+                transaction.Dispose();
+            }
+        }
 
         [TestMethod]
         public void GetToDoListOrderedAscendingByDeadLine_AllOk_ToDoListOrderedAscendingByDeadLineIsGotten()
